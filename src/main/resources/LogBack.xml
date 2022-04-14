@@ -1,0 +1,50 @@
+<configuration scan="true">
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+    <withJansi>true</withJansi>
+    <!--    <property>name="DEV_HOME value="${user.dir}/log"</property>-->
+    <property name="DEV_HOME" value="${user.dir}/log"/>
+    <!--    <timestamp><timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/></timestamp>-->
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                <!--                %d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) - %highlight( %msg%n)-->
+                %d{dd-MM-yyyy HH:mm:ss} %highlight%boldBlue(%.-5level) - %highlight%green( %msg%n)
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--        <file>${DEV_HOME}/mojPlikBezNazwy.log</file>&ndash;&gt;-->
+        <file>${DEV_HOME}/timeBasedlogFile_${bySecond}.log</file>  <!-- z timestamp-->
+        <!--        <file>${DEV_HOME}/timeBasedlogFile.log</file>-->
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${DEV_HOME}/timeBasedlogFile.%d{yyyy-MM-dd-HH-mm}.zip</fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <totalSizeCap>30KB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%thread] %.-1level %logger{35} - ( %msg%n)</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE_HTML" class="ch.qos.logback.core.FileAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.html.HTMLLayout">
+                <!--                <pattern>%thread%level%logger%msg</pattern>-->
+                <pattern>%thread%level%logger%msg</pattern>
+            </layout>
+        </encoder>
+        <file>${DEV_HOME}/timeBasedlogFile_HTML_${bySecond}.html</file>
+    </appender>
+    <logger name="com.sii.tests">
+        <appender-ref ref="FILE"/>
+    </logger>
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE_HTML"/>
+    </root>
+</configuration>
