@@ -3,6 +3,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -48,6 +50,19 @@ public class BrowserEnvironment {
                 driver = new FirefoxDriver(optionsFirefox);
                 driver.get(System.getProperty("appUrl"));
                 break;
+
+            case "edge":
+                EdgeOptions edgeOptions = new EdgeOptions();
+                WebDriverManager.edgedriver().setup();
+                driver = new EdgeDriver(edgeOptions);
+                driver.get(System.getProperty("appUrl"));
+
+            case "ie":
+                InternetExplorerOptions ieOptions = new InternetExplorerOptions();
+                WebDriverManager.iedriver().setup();
+                driver = new InternetExplorerDriver();
+                driver.get(System.getProperty("appUrl"));
+
             default:
                 InternetExplorerOptions optionsdefault = new InternetExplorerOptions();
                 WebDriverManager.iedriver().setup();

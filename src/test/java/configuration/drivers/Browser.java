@@ -8,5 +8,6 @@ public enum Browser {
     EDGE("edge");
 
 
-
+    Browser(String ie) {
+    }
 }

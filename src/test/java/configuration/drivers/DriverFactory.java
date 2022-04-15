@@ -1,31 +1,34 @@
 package configuration.drivers;
+import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
+import io.github.bonigarcia.wdm.managers.EdgeDriverManager;
+import io.github.bonigarcia.wdm.managers.FirefoxDriverManager;
+import io.github.bonigarcia.wdm.managers.InternetExplorerDriverManager;
 
-import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public  class DriverFactory {
 
-import java.util.concurrent.TimeUnit;
-
-public abstract class DriverFactory {
-
-    protected ThreadLocal<WebDriver> drivers = new ThreadLocal<>();
-    protected abstract WebDriver createDriver();
-    Logger log = LoggerFactory.getLogger("DriverFactory");
-
-    public void quitDriver() {
-        if (null != drivers.get()) {
-            try {
-                drivers.get().quit(); // First quit WebDriver session gracefully
-                drivers.remove(); // Remove WebDriver reference from the ThreadLocal variable.
-            } catch (Exception e) {
-//                System.err("Unable to gracefully quit WebDriver.", e); // We'll replace this with actual Loggers later - don't worry !
-                log.info("System is not able to correctly quit WebDriver");
-            }
-
+    private ChromeDriverManager getChromeDriverManager(Browser browser) {
+        if (browser == Browser.CHROME) {
         }
+        return new ChromeDriverManager();
     }
 
-//    public WebDriver getDriver(Browser browser) {
-//
-//    }
+    private FirefoxDriverManager getFirefoxDriverManager(Browser browser) {
+        if (browser == Browser.FIREFOX) {
+        }
+        return new FirefoxDriverManager();
+    }
+
+    private EdgeDriverManager getEdgeDriverManager(Browser browser) {
+        if (browser == Browser.EDGE) {
+        }
+
+        return new EdgeDriverManager();
+    }
+
+    private InternetExplorerDriverManager getInternetExplorerDriverManager(Browser browser) {
+        if (browser == Browser.IE) {
+        }
+        return new InternetExplorerDriverManager();
+    }
+
 }
