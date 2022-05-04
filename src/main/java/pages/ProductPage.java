@@ -1,5 +1,6 @@
 package pages;
 
+import helpers.StringConverter;
 import models.Cart;
 import models.Product;
 import org.junit.Assert;
@@ -10,6 +11,8 @@ import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +26,8 @@ public class ProductPage extends BasePage {
     private MenuCategory menuCategory = new MenuCategory(driver);
     private  MenuPage menuPage = new MenuPage(driver);
     private ShopCartPopupPage shopCartPopupPage= new ShopCartPopupPage(driver);
-
     private static final DecimalFormat df = new DecimalFormat("0.00");
+    private List<Product> selectedProductsList = new ArrayList<>();
 
     @FindBy(xpath = "//div[@class='col-md-6']/h1")
     private WebElement displayedProduct;
@@ -100,8 +103,12 @@ public class ProductPage extends BasePage {
         DecimalFormat dFormat = new DecimalFormat("#,###.##");
         for (Product product : cart.getProductsList()) {
             productPageValues.add(product.getName());
+            log.info("Product price before formatting is :" +product.getPrice());
             double productPrice = Double.parseDouble(dFormat.format(product.getPrice()));
+//            double productPrice = StringConverter.covertStringIntoDouble(product.getPrice());
+            log.info("Product price is " + productPrice);
             productPageValues.add(String.valueOf(productPrice));
+            log.info("quantity number is: " + product.getQuantity());
             productPageValues.add(String.valueOf(product.getQuantity()));
             double totalPriceDouble = Double.parseDouble(dFormat.format(product.getTotalPrice()));
             productPageValues.add(String.valueOf(totalPriceDouble));
@@ -109,18 +116,17 @@ public class ProductPage extends BasePage {
         return productPageValues;
     }
 
-    public List<Product> addRandomProductWithVerification(int productAmount) throws InterruptedException {
+    public List<Product> addRandomProductWithVerification(int productAmount) throws InterruptedException, IOException, AWTException {
         int basketAmount = getBasketAmount();
 
         String productName = null;
         int quantity = 0;
         double price = 0;
         double totalPrice = 0;
-        List<Product> selectedProductsList = null;
+        List<Product> selectedProductsList = new ArrayList<>();
         WebElement randomProduct = null;
 
-        while (basketAmount < productAmount) {
-            selectedProductsList = new ArrayList<>();
+        while (selectedProductsList.size() < productAmount) {
             menuCategory.getRandomCategory();
             log.info("***** Random category is chosen *****");
             randomProduct = menuPage.selectRandomProduct();
@@ -146,9 +152,7 @@ public class ProductPage extends BasePage {
             totalPrice = price * quantity;
 
             Product product = new Product(productName, price, quantity, totalPrice, driver);
-            List<Product> products = new ArrayList<>();
-            products.add(product);
-//            selectedProductsList.add(product);
+            selectedProductsList.add(product);
 
             String parentWindowHandler = driver.getWindowHandle();
             log.info("Parent window id is: " + parentWindowHandler);
@@ -168,10 +172,7 @@ public class ProductPage extends BasePage {
             Assert.assertNotEquals(basketAmount, refreshedBasketAmount);
             log.info("***** Amount of products in basket correctly differentiate from the initial one *****");
             basketAmount = getBasketAmount();
-            selectedProductsList = products;
             System.out.println("size of product list on product page equals: " + selectedProductsList.size());
-
-
         }
         return selectedProductsList;
     }

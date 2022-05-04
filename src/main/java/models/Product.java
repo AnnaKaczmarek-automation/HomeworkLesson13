@@ -1,11 +1,7 @@
 package models;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import pages.BasePage;
-
-import java.text.DecimalFormat;
-import java.util.List;
 
 public class Product extends BasePage {
 

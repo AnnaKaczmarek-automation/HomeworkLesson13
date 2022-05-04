@@ -49,11 +49,8 @@ public class CartPage extends BasePage{
     public void verifyShippingCost(Cart cart){
         dFormat = new DecimalFormat("#,###.##");
         double shippingCost = Double.parseDouble(getShippingCost().getText().substring(1));
-        System.out.println(shippingCost);
-        double totalValue = Double.parseDouble(dFormat.format(cart.sumListValuesInCart(cart) + shippingCost));
-        System.out.println(totalValue);
+        double totalValue = Double.parseDouble(dFormat.format(cart.sumProductValuesInCart(cart) + shippingCost));
         double totalDisplayedValue = Double.parseDouble(dFormat.format(getTotalPrice()));
-        System.out.println(totalDisplayedValue);
 
         Assertions.assertThat(totalValue).isEqualTo(totalDisplayedValue);
         log.info("***** Displayed total cost is correct *****");

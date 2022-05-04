@@ -1,0 +1,23 @@
+[main] I ProductPage.class - ( ***** Random product is chosen *****
+[main] I ProductPage.class - ( ***** Amount of products was types in *****
+[main] I ProductPage.class - ( Parent window id is: CDwindow-F743C27CA78F97CD6E9E5F2E04374B20
+[main] I ProductPage.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: HUMMINGBIRD SWEATER
+[main] I ShopCartPopupPage.class - ( Actual product price is: 28.72
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I ProductPage.class - ( ***** Product data are correct *****
+[main] I ProductPage.class - ( ***** Continue shopping button was chosen *****
+[main] I ProductPage.class - ( ***** Popup window is closed *****
+[main] I ProductPage.class - ( Actual amount of products in basket is: 3
+[main] I ProductPage.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
+[main] I ProductPage.class - ( Product price before formatting is :29.0
+[main] I ProductPage.class - ( Product price is 29.0
+[main] I ProductPage.class - ( quantity number is: 1
+[main] I ProductPage.class - ( Product price before formatting is :19.12
+[main] I ProductPage.class - ( Product price is 19.12
+[main] I ProductPage.class - ( quantity number is: 1
+[main] I ProductPage.class - ( Product price before formatting is :28.72
+[main] I ProductPage.class - ( Product price is 28.72
+[main] I ProductPage.class - ( quantity number is: 1
+[main] I CartPage.class - ( ***** Displayed total cost is correct *****

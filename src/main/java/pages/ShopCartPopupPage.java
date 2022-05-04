@@ -10,6 +10,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +64,7 @@ public class ShopCartPopupPage extends BasePage{
     public void continueShopping(){
         clickOnElement(continueShoppingBtn);
     }
-    public void verifyShopCartData(String name, double price, int quantity) throws InterruptedException {
+    public void verifyShopCartData(String name, double price, int quantity) throws InterruptedException, IOException, AWTException {
 //        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(shopCartPopUp));//przy tej mwtodzie wyswietla się popop ale test sie wywala
 //        //bo niby go nie widzi. pokombinowac z metodą wykorzystujacą driver.getHandles();
 //        waitUntilVisibilityOfElement(shopCartPopUp);
@@ -102,6 +107,11 @@ public class ShopCartPopupPage extends BasePage{
         double actualTotalAmount = Double.parseDouble(totalAmountInfo.getText().substring(1));
         highlightElements(shippingInfo);
         Thread.sleep(4000);
+        System.out.println("String shipping prise equals: " + shippingInfo.getText().substring(1));
+        if(shippingInfo.getText().substring(1).equals("ree")){
+            BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            ImageIO.write(image, "png", new File("/screenshot.png"));
+        }
         double shippingPrice = Double.parseDouble(shippingInfo.getText().substring(1));
 //        dFormat = new DecimalFormat("#,###.##");
 //        double shippingDouble = Double.parseDouble(dFormat.format(shippingPrice));

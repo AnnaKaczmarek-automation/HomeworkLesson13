@@ -11,6 +11,8 @@ import pages.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 public class MyStoreTest extends TestBase {
@@ -102,7 +104,7 @@ public class MyStoreTest extends TestBase {
     }
 
     @Test
-    public void addingProductToShoppingCartTests() throws InterruptedException {
+    public void addingProductToShoppingCartTests() throws InterruptedException, IOException, AWTException {
 
         int basketAmount = productPage.getBasketAmount();
         while (basketAmount < 15) {
@@ -139,12 +141,13 @@ public class MyStoreTest extends TestBase {
     }
 
     @Test
-    public void basketFunctionalityTest() throws InterruptedException {
-        List<Product> selectedProductsList = productPage.addRandomProductWithVerification(5);
+    public void basketFunctionalityTest() throws InterruptedException, IOException, AWTException {
+        List<Product> selectedProductsList = productPage.addRandomProductWithVerification(3);
         Cart cart = new Cart(driver, selectedProductsList);
         basePage.openBasket();
 
         try {
+            //produkty moga sie powtarzać, tylko w koszyku trzeba to wziąć pod uwagę że rodzajów produktu będzie mniej
             Assert.assertEquals(productPage.getProductInfoFromProductPage(cart), basketPage.getProductInfoFromBasket());
             System.out.println("Lists consist of equal values");
         } catch (Throwable e) {
@@ -152,8 +155,15 @@ public class MyStoreTest extends TestBase {
         }
 
         cartPage.verifyShippingCost(cart);
-        basketPage.changeAmountOfProduct(1, "5");
+        basketPage.increaseAmountOfProduct(1, "5");
         basketPage.verifyTotalCost(cart);
+        basketPage.verifyIncreasedQuantityChange(2);
+        //sprawdzenie poprawności całkowitego kosztu
+        basketPage.verifyTotalCost(cart);
+        basketPage.verifyDecreasedQuantityChange(2);
+        //sprawdzenie poprawności całkowitego kosztu
+        basketPage.verifyTotalCost(cart);
+
     }
 }
 

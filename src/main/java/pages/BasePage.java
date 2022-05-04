@@ -150,6 +150,7 @@ public class BasePage {
 
 
     public void setValueIntoInputBox(WebElement element, String input ){
+        waitUntilVisibilityOfElement(element);
         element.clear();
         element.sendKeys(input);
     }

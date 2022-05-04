@@ -1,8 +1,8 @@
 package models;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import pages.BasePage;
+import pages.BasketPage;
 
 import java.util.List;
 
@@ -16,19 +16,18 @@ public class Cart extends BasePage {
         this.productsList = productsList;
     }
 
+    BasketPage basketPage = new BasketPage(driver);
+
     public List<Product> getProductsList() {
         return productsList;
     }
 
-    public Double sumListValuesInCart(Cart elementList){
+    public Double sumProductValuesInCart(Cart elementList){
         double sum = 0;
         for (Product product : elementList.getProductsList()) {
-            sum += product.getPrice();
+            sum += product.getPrice() * product.getQuantity();
         }
         return sum;
     }
 
-//    public Cart(WebDriver driver) {
-//        super(driver);
-//    }
 }
