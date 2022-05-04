@@ -1,0 +1,25 @@
+[main] D EnvironmentProperty - ( >>>>>>> Environment name : env_int
+[main] D EnvironmentProperty - ( #### Loading property from uri file:/C:/Selenium_Java_course/HomeworkLesson13/target/classes/env_int
+[main] D EnvironmentProperty - ( ****Loading environment property continent = europe 
+[main] D EnvironmentProperty - ( ****Loading environment property firstName = Ania 
+[main] D EnvironmentProperty - ( ****Loading environment property env_name = int 
+[main] D EnvironmentProperty - ( ****Loading environment property mail = ania@gmail.com 
+[main] D EnvironmentProperty - ( ****Loading environment property eTitle = Selenium 
+[main] D EnvironmentProperty - ( ****Loading environment property appUrl = http://146.59.32.4/index.php 
+[main] D EnvironmentProperty - ( ****Loading environment property age = 33 
+[main] D EnvironmentProperty - ( ****Loading environment property secondName = Kaczmarek 
+[main] D EnvironmentProperty - ( #### Properties loaded from env_int : 8 
+[main] D i.g.b.wdm.cache.ResolutionCache - ( Resolution chrome=100 in cache (valid until 10:27:18 28/04/2022 CEST)
+[main] D i.g.b.wdm.cache.ResolutionCache - ( Resolution chrome100=100.0.4896.60 in cache (valid until 11:14:31 28/04/2022 CEST)
+[main] I i.g.bonigarcia.wdm.WebDriverManager - ( Using chromedriver 100.0.4896.60 (resolved driver for Chrome 100)
+[main] D i.g.bonigarcia.wdm.WebDriverManager - ( Driver chromedriver 100.0.4896.60 found in cache
+[main] I i.g.bonigarcia.wdm.WebDriverManager - ( Exporting webdriver.chrome.driver as C:\Users\kaczmaa5\.cache\selenium\chromedriver\win32\100.0.4896.60\chromedriver.exe
+[main] I MyStoreTest.class - ( ***** Random category is chosen *****
+[main] I MyStoreTest.class - ( ***** Random product is chosen *****
+[main] I MyStoreTest.class - ( ***** Amount of products was types in *****
+[main] I MyStoreTest.class - ( Parent window id is: CDwindow-293DC77A22466E7E0226DFCB689C76ED
+[main] I MyStoreTest.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: MUG TODAY IS A GOOD DAY
+[main] I ShopCartPopupPage.class - ( Actual product price is: 11.9
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 2

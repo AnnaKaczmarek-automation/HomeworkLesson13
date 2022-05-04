@@ -1,5 +1,6 @@
 package pages;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -7,9 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,6 +18,9 @@ public class MenuPage extends BasePage {
     public MenuPage(WebDriver driver) {
         super(driver);
     }
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+    MenuCategory menuCategory = new MenuCategory(driver);
 
     @FindBy(xpath = "//div[@id='search_widget']/form/button[@type='submit']")
     private WebElement lensButton;
@@ -58,6 +61,16 @@ public class MenuPage extends BasePage {
     @FindBy(xpath = "//ul[@class='product-flags']/li")
     private WebElement discountLabel;
 
+    @FindBy(xpath = "//div[@class='product-price-and-shipping']/span[1]")
+    private WebElement regularPrice;
+
+    @FindBy(xpath = "//div[@class='product-price-and-shipping']/span[3]")
+    private WebElement discountPrice;
+
+    @FindBy(xpath = "//div[@class='product-description']/h2/a")
+    private WebElement productName;
+
+
     Logger log = LoggerFactory.getLogger("MenuPage.class");
 
 
@@ -77,7 +90,6 @@ public class MenuPage extends BasePage {
 
     public MenuPage enterProductNameIntoSearchField(String productName) throws InterruptedException {
         searchField.sendKeys(productName);
-        Thread.sleep(5000);
         return this;
     }
 
@@ -85,75 +97,130 @@ public class MenuPage extends BasePage {
         return categoriesList;
     }
 
-    public void verifyMainMenuOptions() throws InterruptedException {
-        wait.until(ExpectedConditions.visibilityOfAllElements(categoriesList));
+//    public List<WebElement> getSubMenuOptions(List<WebElement> categoriesList){
+//        List<WebElement> subCategories;
+//        for (WebElement mainCategory : categoriesList) {
+//            mainCategory.findElements()
+//        }
+//
+//        return subCategories;
+//    }
+
+    public void verifyMainMenuOptions() {
         List<WebElement> menuOptions = getMenuOptions();
-        Iterator<WebElement> category = menuOptions.iterator();
-        while (category.hasNext()) {
-            waitForMenuRefresh();
-            for (WebElement option : menuOptions) {
-                waitUntilElementIsClickable(option);
-                highlightElements(option);
-                String expectedName = option.getText();
-                log.info("Expected category name in: " + expectedName);
-                Thread.sleep(3000);
+        wait.until(ExpectedConditions.visibilityOfAllElements(categoriesList));
+        for (int i = 0; i < menuOptions.size(); i++) {
+            WebElement option = menuOptions.get(i);
+            waitUntilElementIsClickable(option);
+            highlightElements(option);
+            String expectedName = option.getText();
+            log.info("Expected category name in: " + expectedName);
 
-                clickOnElement(option);
-                log.info("category was chosen");
-                Thread.sleep(3000);
+            clickOnElement(option);
+            log.info("category was chosen");
 
-                highlightElements(displayedCategory);
-                String actualOption = displayedCategory.getText().toUpperCase();
-                assertIfEquals(expectedName, actualOption);
-                log.info("Correct category was displayed");
-                Thread.sleep(3000);
+            highlightElements(displayedCategory);
+            String actualOption = displayedCategory.getText().toUpperCase();
+            assertIfEquals(expectedName, actualOption);
+            log.info("Correct category was displayed");
 
-                highlightElements(filterMenu);
-                Assert.assertTrue(filterMenu.isDisplayed());
-                log.info("FilterMenu was displayed");
+            highlightElements(filterMenu);
+            Assert.assertTrue(filterMenu.isDisplayed());
+            log.info("FilterMenu was displayed");
 
-                Integer optionAmount = getAmountOfElements(displayedProducts);
-                log.info("Amount of displayed products is: " + optionAmount);
-                highlightElements(amountInfo);
-                String actualAmount = amountInfo.getText();
-                log.info("Label information is: " + "'" + actualAmount + "'");
-                assertThat(actualAmount).contains(String.valueOf(optionAmount));
-                log.info("Amount of available options is correct");
-                driver.navigate().back();
-            }
-
+            Integer optionAmount = getAmountOfElements(displayedProducts);
+            log.info("Amount of displayed products is: " + optionAmount);
+            highlightElements(amountInfo);
+            String actualAmount = amountInfo.getText();
+            log.info("Label information is: " + "'" + actualAmount + "'");
+            assertThat(actualAmount).contains(String.valueOf(optionAmount));
+            log.info("Amount of available options is correct");
+            driver.navigate().back();
+            menuOptions = getMenuOptions();
         }
     }
+
 
     public void waitForMenuRefresh() {
         wait.until((ExpectedConditions.refreshed(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//ol/li/span")))));
 
     }
 
-    public void verifySubMenuOptions(List<WebElement> categoriesList) {
-        List<WebElement> subOptionsList = new ArrayList<>();
-        for (WebElement category : categoriesList) {
-            subOptionsList = category.findElements(By.xpath("//div[@class='popover sub-menu js-sub-menu collapse']/ul[@class='top-menu']/li/a"));
-            for (WebElement subOption : subOptionsList) {
-                String expectedName = subOption.getText();
-                log.info("Expected option name in: " + expectedName);
+    public void verifySubMenuOptions() throws InterruptedException {
+        waitUntilVisibilityOfAllElements(categoriesList);
+//        int amountOfCategories = menuCategory.getAmountOfCategories(categoriesList);
+        SoftAssertions softAssertions = new SoftAssertions();
+        List<WebElement> menuOptions = getMenuOptions();
+        for (int i = 0; i < menuOptions.size(); i++) {
+            mouseHover(menuOptions.get(i));
+            highlightElements(menuOptions.get(i));
+//            waitUntilVisibilityOfAllElements(menuCategory.getSubCategoriesList(category));
+            List<WebElement> subCategoriesList = menuCategory.getSubCategoriesList(menuOptions.get(i));
+            if (subCategoriesList.size() > 0) {
+                for (WebElement subCategory : subCategoriesList) {
+                    mouseHover(subCategory);
+                    highlightElements(subCategory);
+                    System.out.println(subCategory.getText());
+                    waitUntilElementIsClickable(subCategory);
+                    String expectedName = subCategory.getText();
+                    System.out.println(expectedName);
+                    log.info("Expected option name in: " + expectedName);
 
-                subOption.click();
-                log.info("SubOption was chosen");
+                    clickOnElement(subCategory);
+                    log.info("SubOption was chosen");
 
-                String actualOption = displayedCategory.getText();
-                assertIfEquals(expectedName, actualOption);
-                log.info("Correct subOption was displayed");
+                    String actualOption = displayedCategory.getText();
+                    softAssertions.assertThat(actualOption).isEqualTo(expectedName);
+//                    assertIfEquals(expectedName, actualOption);
+                    log.info("Correct subOption was displayed");
 
-                Assert.assertTrue(filterMenu.isDisplayed());
-                log.info("FilterMenu was displayed");
+                    Assert.assertTrue(filterMenu.isDisplayed());
+                    log.info("FilterMenu was displayed");
 
-                Integer optionAmount = getAmountOfElements(displayedProducts);
-                String actualAmount = amountInfo.getText();
-                assertThat(actualAmount).contains(String.valueOf(optionAmount));
+                    Integer optionAmount = getAmountOfElements(displayedProducts);
+                    String actualAmount = amountInfo.getText();
+                    softAssertions.assertThat(actualAmount).contains(String.valueOf(optionAmount));
+                    getMenuOptions();
+                    subCategoriesList = menuCategory.getSubCategoriesList(menuOptions.get(i));
+                }
             }
+            softAssertions.assertAll();
         }
+
     }
+
+
+//        List<WebElement> subCategoriesList = menuCategory.getSubCategoriesList(categoriesList);
+//        if (subCategoriesList.size() > 0) {
+//            for (WebElement subCategory : subCategoriesList) {
+//                waitUntilVisibilityOfElement(subCategory);
+//                mouseHover(subCategory);
+//                String expectedName = subCategory.getText();
+//                System.out.println(expectedName);
+//                log.info("Expected option name in: " + expectedName);
+//
+//                clickOnElement(subCategory);
+//                log.info("SubOption was chosen");
+//
+//                String actualOption = displayedCategory.getText();
+//                assertIfEquals(expectedName, actualOption);
+//                log.info("Correct subOption was displayed");
+//
+//                Assert.assertTrue(filterMenu.isDisplayed());
+//                log.info("FilterMenu was displayed");
+//
+//                Integer optionAmount = getAmountOfElements(displayedProducts);
+//                String actualAmount = amountInfo.getText();
+//                assertThat(actualAmount).contains(String.valueOf(optionAmount));
+//
+//                getMenuOptions();
+//                subCategoriesList = menuCategory.getSubCategoriesList(categoriesList);
+//            }
+//
+//        }
+
+
+
 
     public void selectCategory(String categoryName) {
         for (WebElement category : categoriesList) {
@@ -258,40 +325,48 @@ public class MenuPage extends BasePage {
     }
 
     public void checkDiscountVisibility() {
-        for (WebElement product : displayedProducts) {
-            waitUntilVisibilityOfElement(product);
-            WebElement discount = driver.findElement(By.xpath("//ul[@class='product-flags']/li"));
-            String discountAmount = discount.getText();
-            String actualDiscountAmount = discountAmount.substring(1, discountAmount.length() - 1);
-            String expectedDiscountAmount = "20";
+        wait.until(c -> displayedProducts.size() == 2);
+        if (displayedProducts.size() > 0) {
+            for (WebElement product : displayedProducts) {
 
-            WebElement name = driver.findElement(By.xpath("//div[@class='product-description']/h2"));
-            String productName = name.getText();
-            assertIfEquals(expectedDiscountAmount, actualDiscountAmount);
-            log.info("Correct discount was given to the product " + productName);
+                System.out.println(product.getText());
 
-            WebElement productRegPrice = driver.findElement(By.xpath("//div[@class='product-price-and-shipping']/span[1]"));
-            String regPriceText = productRegPrice.getText();
-            String regularPrice = regPriceText.substring(1);
-            double regularPriceDouble = Double.parseDouble(regularPrice);
-            log.info("Regular product prise is: " + regularPriceDouble);
+                waitUntilVisibilityOfElement(product);
+                WebElement discount = product.findElement(By.xpath(".//ul[@class='product-flags']/li"));
+                String discountAmount = discount.getText();
+                String actualDiscountAmount = discountAmount.substring(1, discountAmount.length() - 1);
+                String expectedDiscountAmount = "20";
 
-            WebElement productDiscPrice = driver.findElement(By.xpath("//div[@class='product-price-and-shipping']/span[3]"));
-            String discPriceText = productDiscPrice.getText();
-            String discPrice = discPriceText.substring(1);
-            double discPriceDouble = Double.parseDouble(discPrice);
-            log.info("Discounted product price is: " + discPriceDouble);
+//            String displayedProductName = productName.getText();
+                String displayedProductName = product.findElement(By.xpath(".//div[@class='product-description']/h2/a")).getText();
+                assertIfEquals(expectedDiscountAmount, actualDiscountAmount);
+                log.info("Correct discount was given to the product " + displayedProductName);
 
-            double discountValue = countDiscount(regularPriceDouble, Integer.parseInt(expectedDiscountAmount));
-            double displayedDiscountedPrice = regularPriceDouble - discountValue;
+                String regPriceText = regularPrice.getText();
+                String regularPrice = regPriceText.substring(1);
+                double regularPriceDouble = Double.parseDouble(regularPrice);
+                log.info("Regular product prise is: " + regularPriceDouble);
 
-            assertIfEquals(String.valueOf(displayedDiscountedPrice), discPrice);
+                String discPriceText = discountPrice.getText();
+                String discPrice = discPriceText.substring(1);
+                double discPriceDouble = Double.parseDouble(discPrice);
+                log.info("Discounted product price is: " + discPriceDouble);
+
+                double discountValue = calculateDiscount(regularPriceDouble, Integer.parseInt(expectedDiscountAmount));
+                double calculatedDiscountedPrice = Double.parseDouble(df.format(regularPriceDouble - discountValue));
+
+                assertIfEquals(String.valueOf(calculatedDiscountedPrice), discPrice);
+            }
+        } else {
+            log.info("Any product is displayed");
         }
     }
 
-    public void selectProduct() {
-        clickOnElement(getRandomElement(displayedProducts));
+    public WebElement selectRandomProduct() {
+        WebElement randomElement = getRandomElement(displayedProducts);
+        return randomElement;
     }
+
 }
 
 

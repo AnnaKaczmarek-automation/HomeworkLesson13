@@ -1,15 +1,24 @@
 package pages;
 
+import models.Product;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Coordinates;
+import org.openqa.selenium.interactions.Locatable;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.events.internal.EventFiringMouse;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webListener.WebListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -17,20 +26,41 @@ public class BasePage {
     protected WebDriverWait wait;
     protected Actions actions;
     protected WebDriver driver;
+    private EventFiringMouse eventFiringMouse;
+    private ProductPage productPage;
+    private MenuCategory menuCategory;
+    private MenuPage menuPage;
+    private ShopCartPopupPage shopCartPopupPage;
+    private Logger log = LoggerFactory.getLogger("BasePage.class");
 
     public BasePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, 15);
+        wait = new WebDriverWait(driver, 25);
         actions = new Actions(driver);
     }
 
+    @FindBy(xpath = "//span[@class='cart-products-count']")
+    private WebElement basketAmount;
+
+    public void mouseHover(WebElement element){
+        eventFiringMouse = new EventFiringMouse(driver, new WebListener());
+        Locatable item = (Locatable)element;
+        Coordinates coordinates = item.getCoordinates();
+        eventFiringMouse.mouseMove(coordinates);
+    }
 
     public WebElement getRandomElement(List<WebElement> elements) {
         Random random = new Random();
-        WebElement randomProduct = elements.get(random.nextInt(elements.size()));
-        return randomProduct;
+        WebElement randomElement = elements.get(random.nextInt(elements.size()));
+        return randomElement;
+    }
 
+    public int getRandomNumberInRange(int min, int max){
+        Random random = new Random();
+        return random.ints(min, max)
+                .findFirst()
+                .getAsInt();
     }
 
     public void clickOnElement(WebElement element) {
@@ -40,8 +70,13 @@ public class BasePage {
     }
 
     public void waitUntilVisibilityOfElement(WebElement element) {
+        highlightElements(element);
         wait.until(ExpectedConditions.visibilityOf(element));
 
+    }
+
+    public void waitUntilVisibilityOfAllElements(List<WebElement> elements){
+        wait.until(ExpectedConditions.visibilityOfAllElements(elements));
     }
 
     public void waitUntilElementIsClickable(WebElement element){
@@ -58,14 +93,6 @@ public class BasePage {
             e.printStackTrace();
         }
     }
-
-
-
-//    public void hooverOnElement(WebElement element) {
-//
-//        actions = new Actions(this.driver);
-//        actions.moveToElement(element).click().perform();
-//    }
 
     public void verifyVisibilityOfElement(String selectedElement, WebElement element)
     {
@@ -86,6 +113,7 @@ public class BasePage {
     public void assertIfEquals(String expected, String actual){
         Assert.assertEquals(expected,actual);
     }
+
     public Integer getAmountOfElements(List<WebElement> elementsList){
         return elementsList.size();
     }
@@ -100,7 +128,31 @@ public class BasePage {
         }
     }
 
-    public Double countDiscount(double price, int discount){
+    public Double calculateDiscount(double price, int discount){
         return (price * discount)/100;
     }
-}
+
+    public Integer getBasketAmount(){
+//        int numberInBasket = Integer.parseInt(basketAmount.getText().substring(1, basketAmount.getText().length()-1));
+        waitUntilVisibilityOfElement(basketAmount);
+        String  number = basketAmount.getText();
+//        String number1 = StringUtils.remove(number, "(");
+//        String number2 = StringUtils.remove(number1, ")");
+//        int numberInBasket = Integer.parseInt(number2);
+        //String digits = text.replaceAll("[^0-9.]", "");
+        int numberInBasket = Integer.parseInt(number.replaceAll("[^0-9.]", ""));
+        return numberInBasket;
+    }
+
+    public void openBasket(){
+        clickOnElement(basketAmount);
+    }
+
+
+    public void setValueIntoInputBox(WebElement element, String input ){
+        element.clear();
+        element.sendKeys(input);
+    }
+
+
+   }

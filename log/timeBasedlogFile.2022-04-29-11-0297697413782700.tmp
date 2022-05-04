@@ -1,0 +1,22 @@
+[main] I MyStoreTest.class - ( ***** Continue shopping button was chosen *****
+[main] I MyStoreTest.class - ( ***** Popup window is closed *****
+[main] I MyStoreTest.class - ( Actual amount of products in basket is: 1
+[main] I MyStoreTest.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
+[main] I MyStoreTest.class - ( ***** Random category is chosen *****
+[main] I MyStoreTest.class - ( ***** Random product is chosen *****
+[main] I MyStoreTest.class - ( ***** Amount of products was types in *****
+[main] I MyStoreTest.class - ( Parent window id is: CDwindow-13E8EAC95B831BE7271E73CB59059306
+[main] I MyStoreTest.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: HUMMINGBIRD CUSHION
+[main] I ShopCartPopupPage.class - ( Actual product price is: 18.9
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I MyStoreTest.class - ( ***** Product data are correct *****
+[main] I MyStoreTest.class - ( ***** Continue shopping button was chosen *****
+[main] I MyStoreTest.class - ( ***** Popup window is closed *****
+[main] I MyStoreTest.class - ( Actual amount of products in basket is: 2
+[main] I MyStoreTest.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
+[main] I MyStoreTest.class - ( ***** Random category is chosen *****
+[main] I MyStoreTest.class - ( ***** Random product is chosen *****
+[main] I MyStoreTest.class - ( ***** Amount of products was types in *****
+[main] I MyStoreTest.class - ( Parent window id is: CDwindow-13E8EAC95B831BE7271E73CB59059306

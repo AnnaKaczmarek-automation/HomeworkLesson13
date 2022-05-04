@@ -1,0 +1,22 @@
+[main] I ShopCartPopupPage.class - ( Actual product name is: MUG THE ADVENTURE BEGINS
+[main] I ShopCartPopupPage.class - ( Actual product price is: 11.9
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I ProductPage.class - ( ***** Product data are correct *****
+[main] I ProductPage.class - ( ***** Continue shopping button was chosen *****
+[main] I ProductPage.class - ( ***** Popup window is closed *****
+[main] I ProductPage.class - ( Actual amount of products in basket is: 4
+[main] I ProductPage.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
+[main] I ProductPage.class - ( ***** Random category is chosen *****
+[main] I ProductPage.class - ( ***** Random product is chosen *****
+[main] I ProductPage.class - ( ***** Amount of products was types in *****
+[main] I ProductPage.class - ( Parent window id is: CDwindow-6FD5454F5AF3E92162D92CA6B8C5A5D2
+[main] I ProductPage.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: MUG THE BEST
+[main] I ShopCartPopupPage.class - ( Actual product price is: 11.9
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I ProductPage.class - ( ***** Product data are correct *****
+[main] I ProductPage.class - ( ***** Continue shopping button was chosen *****
+[main] I ProductPage.class - ( ***** Popup window is closed *****
+[main] I ProductPage.class - ( Actual amount of products in basket is: 5
+[main] I ProductPage.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****

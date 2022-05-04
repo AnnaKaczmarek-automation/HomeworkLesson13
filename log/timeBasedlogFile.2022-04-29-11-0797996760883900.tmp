@@ -1,0 +1,24 @@
+[main] I MyStoreTest.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: THE ADVENTURE POSTER
+[main] I ShopCartPopupPage.class - ( Actual product price is: 29.0
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I MyStoreTest.class - ( ***** Product data are correct *****
+[main] I MyStoreTest.class - ( ***** Continue shopping button was chosen *****
+[main] I MyStoreTest.class - ( ***** Popup window is closed *****
+[main] I MyStoreTest.class - ( Actual amount of products in basket is: 4
+[main] I MyStoreTest.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
+[main] I MyStoreTest.class - ( ***** Random category is chosen *****
+[main] I MyStoreTest.class - ( ***** Random product is chosen *****
+[main] I MyStoreTest.class - ( ***** Amount of products was types in *****
+[main] I MyStoreTest.class - ( Parent window id is: CDwindow-12FEC031D1D4529C8E1B2A5A6353F47B
+[main] I MyStoreTest.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: HUMMINGBIRD NOTEBOOK
+[main] I ShopCartPopupPage.class - ( Actual product price is: 12.9
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I MyStoreTest.class - ( ***** Product data are correct *****
+[main] I MyStoreTest.class - ( ***** Continue shopping button was chosen *****
+[main] I MyStoreTest.class - ( ***** Popup window is closed *****
+[main] I MyStoreTest.class - ( Actual amount of products in basket is: 5
+[main] I MyStoreTest.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
