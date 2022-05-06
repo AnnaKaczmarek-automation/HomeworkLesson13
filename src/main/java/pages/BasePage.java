@@ -1,6 +1,4 @@
 package pages;
-
-import models.Product;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -17,18 +15,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webListener.WebListener;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class BasePage {
-    protected WebDriverWait wait;
+
     protected Actions actions;
     protected WebDriver driver;
+    protected WebDriverWait wait;
     private EventFiringMouse eventFiringMouse;
     private ProductPage productPage;
-    private MenuCategory menuCategory;
+//    private MenuCategory menuCategory;
     private MenuPage menuPage;
     private ShopCartPopupPage shopCartPopupPage;
     private Logger log = LoggerFactory.getLogger("BasePage.class");
@@ -36,7 +33,7 @@ public class BasePage {
     public BasePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, 25);
+        wait = new WebDriverWait(driver, 40);
         actions = new Actions(driver);
     }
 
@@ -72,7 +69,6 @@ public class BasePage {
     public void waitUntilVisibilityOfElement(WebElement element) {
         highlightElements(element);
         wait.until(ExpectedConditions.visibilityOf(element));
-
     }
 
     public void waitUntilVisibilityOfAllElements(List<WebElement> elements){
@@ -105,7 +101,6 @@ public class BasePage {
         driver.findElements(By.xpath(locator));
     }
 
-
     public void assertVisibilityOfElement(WebElement element){
         Assert.assertTrue(element.isDisplayed());
     }
@@ -133,13 +128,8 @@ public class BasePage {
     }
 
     public Integer getBasketAmount(){
-//        int numberInBasket = Integer.parseInt(basketAmount.getText().substring(1, basketAmount.getText().length()-1));
         waitUntilVisibilityOfElement(basketAmount);
         String  number = basketAmount.getText();
-//        String number1 = StringUtils.remove(number, "(");
-//        String number2 = StringUtils.remove(number1, ")");
-//        int numberInBasket = Integer.parseInt(number2);
-        //String digits = text.replaceAll("[^0-9.]", "");
         int numberInBasket = Integer.parseInt(number.replaceAll("[^0-9.]", ""));
         return numberInBasket;
     }
@@ -147,7 +137,6 @@ public class BasePage {
     public void openBasket(){
         clickOnElement(basketAmount);
     }
-
 
     public void setValueIntoInputBox(WebElement element, String input ){
         waitUntilVisibilityOfElement(element);

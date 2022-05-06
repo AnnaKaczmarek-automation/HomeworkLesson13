@@ -108,10 +108,16 @@
            <version>0.15</version>
        </dependency>
        <dependency>
-           <groupId>org.assertj</groupId>
-           <artifactId>assertj-core</artifactId>
-           <version>3.4.1</version>
-           <scope>test</scope>
+         <groupId>org.assertj</groupId>
+         <artifactId>assertj-core</artifactId>
+         <!-- use 2.9.1 for Java 7 projects -->
+         <version>3.22.0</version>
+         <scope>test</scope>
+       </dependency>
+       <dependency>
+         <groupId>com.github.rkumsher</groupId>
+         <artifactId>utils</artifactId>
+         <version>1.3</version>
        </dependency>
 
     </dependencies>

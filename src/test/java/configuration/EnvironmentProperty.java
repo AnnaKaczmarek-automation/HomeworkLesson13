@@ -24,8 +24,8 @@ public class EnvironmentProperty {
     private String firstName = "Karolina";
     private String secondName = "Kowalska";
     private String mail = "karolina@wp.pl";
-    private String age = "28";
-    private String continent = "europe";
+    private String gender = "female";
+
 
     private EnvironmentProperty() {
         this.app_environment = initAppEnvironment();
@@ -39,8 +39,8 @@ public class EnvironmentProperty {
         this.firstName = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.firstName;
         this.secondName = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.secondName;
         this.mail = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.mail;
-        this.age = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.age;
-        this.continent = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.continent;
+        this.gender = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.gender;
+
 
     }
     private static String initAppEnvironment() {

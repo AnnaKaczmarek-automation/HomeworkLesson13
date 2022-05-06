@@ -1,0 +1,21 @@
+[main] I MyStoreTest.class - ( Lists are not equal. 
+Expecting actual:
+  models.Cart@67b560fe
+to be equal to:
+  models.Cart@45dde6ac
+when recursively comparing field by field, but found the following difference:
+
+field/property 'productsList' differ:
+- actual value  : [models.Product@36df4c26, models.Product@76828577, models.Product@38732372]
+- expected value: [models.Product@639cb788]
+actual and expected values are collections of different size, actual size=3 when expected size=1
+
+The recursive comparison was performed with this configuration:
+- no overridden equals methods were used in the comparison (except for java types)
+- these types were compared with the following comparators:
+  - java.lang.Double -> DoubleComparator[precision=1.0E-15]
+  - java.lang.Float -> FloatComparator[precision=1.0E-6]
+  - java.nio.file.Path -> lexicographic comparator (Path natural order)
+- actual and expected objects and their fields were compared field by field recursively even if they were not of the same type, this allows for example to compare a Person to a PersonDto (call strictTypeChecking(true) to change that behavior).
+
+[main] I CartPage.class - ( ***** Displayed total cost is correct *****

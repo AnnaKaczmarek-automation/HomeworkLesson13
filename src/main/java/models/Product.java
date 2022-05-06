@@ -18,11 +18,6 @@ public class Product extends BasePage {
         this.totalPrice = totalPrice;
     }
 
-//
-//    public Product(WebDriver driver) {
-//        super(driver);
-//    }
-
     public String getName() {
         return name;
     }

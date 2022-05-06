@@ -20,9 +20,9 @@ public class MenuPage extends BasePage {
     }
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
-    MenuCategory menuCategory = new MenuCategory(driver);
+//    MenuCategory menuCategory = new MenuCategory(driver);
 
-    @FindBy(xpath = "//div[@id='search_widget']/form/button[@type='submit']")
+    @FindBy(css = ".material-icons.search")
     private WebElement lensButton;
 
     @FindBy(xpath = "//input[@class='ui-autocomplete-input']")
@@ -73,6 +73,19 @@ public class MenuPage extends BasePage {
 
     Logger log = LoggerFactory.getLogger("MenuPage.class");
 
+    public Integer getAmountOfCategories(List<WebElement> categories) {
+        int categoriesAmount = categories.size();
+        return categoriesAmount;
+    }
+
+    public List<WebElement> getSubCategoriesList(WebElement category) {
+        List<WebElement> subCategoriesList = category.findElements(By.xpath(".//div[@class='popover sub-menu js-sub-menu collapse']/ul[@class='top-menu']/li/a"));
+        return subCategoriesList;
+    }
+
+    public void getRandomCategory() {
+        clickOnElement(getRandomElement(categoriesList));
+    }
 
     public void clickLensButtonToSearch() {
         waitUntilVisibilityOfElement(lensButton);
@@ -108,7 +121,8 @@ public class MenuPage extends BasePage {
 
     public void verifyMainMenuOptions() {
         List<WebElement> menuOptions = getMenuOptions();
-        wait.until(ExpectedConditions.visibilityOfAllElements(categoriesList));
+        waitUntilVisibilityOfAllElements(menuOptions);
+//        wait.until(ExpectedConditions.visibilityOfAllElements(categoriesList));
         for (int i = 0; i < menuOptions.size(); i++) {
             WebElement option = menuOptions.get(i);
             waitUntilElementIsClickable(option);
@@ -140,53 +154,86 @@ public class MenuPage extends BasePage {
         }
     }
 
-
     public void waitForMenuRefresh() {
         wait.until((ExpectedConditions.refreshed(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//ol/li/span")))));
-
     }
 
-    public void verifySubMenuOptions() throws InterruptedException {
-        waitUntilVisibilityOfAllElements(categoriesList);
-//        int amountOfCategories = menuCategory.getAmountOfCategories(categoriesList);
+    public void verifySubMenuOptions() {
         SoftAssertions softAssertions = new SoftAssertions();
         List<WebElement> menuOptions = getMenuOptions();
         for (int i = 0; i < menuOptions.size(); i++) {
-            mouseHover(menuOptions.get(i));
-            highlightElements(menuOptions.get(i));
-//            waitUntilVisibilityOfAllElements(menuCategory.getSubCategoriesList(category));
-            List<WebElement> subCategoriesList = menuCategory.getSubCategoriesList(menuOptions.get(i));
-            if (subCategoriesList.size() > 0) {
-                for (WebElement subCategory : subCategoriesList) {
-                    mouseHover(subCategory);
-                    highlightElements(subCategory);
-                    System.out.println(subCategory.getText());
-                    waitUntilElementIsClickable(subCategory);
-                    String expectedName = subCategory.getText();
-                    System.out.println(expectedName);
-                    log.info("Expected option name in: " + expectedName);
+            clickOnElement(menuOptions.get(i));
+            List<WebElement> subCategories = driver.findElements(By.cssSelector(".category-sub-menu li a"));
+            if (subCategories.size() > 0) {
+                for (int j = 0; j < subCategories.size(); j++) {
+                    waitUntilVisibilityOfElement(subCategories.get(j));
+                    String expectedName = subCategories.get(j).getText();
+                    log.info("Expected subcategory name is: " + expectedName);
 
-                    clickOnElement(subCategory);
+                    clickOnElement(subCategories.get(j));
                     log.info("SubOption was chosen");
 
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("ol li:nth-child(3) ")));
                     String actualOption = displayedCategory.getText();
                     softAssertions.assertThat(actualOption).isEqualTo(expectedName);
-//                    assertIfEquals(expectedName, actualOption);
                     log.info("Correct subOption was displayed");
 
                     Assert.assertTrue(filterMenu.isDisplayed());
                     log.info("FilterMenu was displayed");
 
+                    displayedProducts = driver.findElements(By.xpath("//article[@class='product-miniature js-product-miniature']"));
                     Integer optionAmount = getAmountOfElements(displayedProducts);
                     String actualAmount = amountInfo.getText();
                     softAssertions.assertThat(actualAmount).contains(String.valueOf(optionAmount));
-                    getMenuOptions();
-                    subCategoriesList = menuCategory.getSubCategoriesList(menuOptions.get(i));
-                }
-            }
-            softAssertions.assertAll();
-        }
+                    log.info("Amount of displayed products given in text information is correct");
 
+                    driver.navigate().back();
+                    subCategories = driver.findElements(By.cssSelector(".category-sub-menu li a"));
+                    wait.until(ExpectedConditions.visibilityOfAllElements(subCategories));
+                }
+                softAssertions.assertAll();
+                getMenuOptions();
+            }
+            if (subCategories.size() == 0) {
+                log.info(menuOptions.get(i) + "Category does not have subcategories");
+            }
+
+
+        }
+//        for (int i = 0; i < menuOptions.size(); i++) {
+//            mouseHover(menuOptions.get(i));
+//            highlightElements(menuOptions.get(i));
+//            waitUntilVisibilityOfAllElements(getSubCategoriesList(menuOptions.get(i)));
+//            List<WebElement> subCategoriesList = getSubCategoriesList(menuOptions.get(i));
+//        if (subCategories.size() > 0) {
+//            for (WebElement subCategory : subCategories) {
+//                mouseHover(subCategory);
+//                highlightElements(subCategory);
+//                System.out.println(subCategory.getText());
+//                waitUntilElementIsClickable(subCategory);
+//                String expectedName = subCategory.getText();
+//                System.out.println(expectedName);
+//                log.info("Expected option name in: " + expectedName);
+//
+//                clickOnElement(subCategory);
+//                log.info("SubOption was chosen");
+//
+//                String actualOption = displayedCategory.getText();
+//                softAssertions.assertThat(actualOption).isEqualTo(expectedName);
+////                    assertIfEquals(expectedName, actualOption);
+//                log.info("Correct subOption was displayed");
+//
+//                Assert.assertTrue(filterMenu.isDisplayed());
+//                log.info("FilterMenu was displayed");
+//
+//                Integer optionAmount = getAmountOfElements(displayedProducts);
+//                String actualAmount = amountInfo.getText();
+//                softAssertions.assertThat(actualAmount).contains(String.valueOf(optionAmount));
+//                getMenuOptions();
+//                subCategoriesList = getSubCategoriesList(menuOptions.get(i));
+//            }
+//        }
+//        softAssertions.assertAll();
     }
 
 
@@ -218,8 +265,6 @@ public class MenuPage extends BasePage {
 //            }
 //
 //        }
-
-
 
 
     public void selectCategory(String categoryName) {
@@ -281,23 +326,23 @@ public class MenuPage extends BasePage {
         }
 
 
-        if (number > 9 && number < 30) {
+        if (number >= 10 && number < 30) {
             String priceRangeText = priceRange.getText();
-            String higherPriceString = priceRangeText.substring(10, priceRangeText.length() - 3);
+            String higherPriceString = priceRangeText.substring(9, priceRangeText.length() - 3);
             int higherPriceInt = Integer.parseInt(higherPriceString);
             while (higherPriceInt < number) {
                 highlightElements(rightSlider);
                 rightSlider.sendKeys(Keys.ARROW_RIGHT);
-                higherPriceInt = Integer.parseInt(priceRange.getText().substring(10, priceRange.getText().length() - 3));
+                higherPriceInt = Integer.parseInt(priceRange.getText().substring(9, priceRange.getText().length() - 3));
             }
             while (higherPriceInt > number) {
                 highlightElements(rightSlider);
                 rightSlider.sendKeys(Keys.ARROW_LEFT);
-                higherPriceInt = Integer.parseInt(priceRange.getText().substring(10, priceRange.getText().length() - 3));
+                higherPriceInt = Integer.parseInt(priceRange.getText().substring(9, priceRange.getText().length() - 3));
             }
 
             String priceAfterChange2 = priceRange.getText();
-            String higherPrice2 = priceAfterChange2.substring(10, priceAfterChange2.length() - 3);
+            String higherPrice2 = priceAfterChange2.substring(9, priceAfterChange2.length() - 3);
             int higherPriceInteger2 = Integer.parseInt(higherPrice2);
             Assert.assertEquals(number, higherPriceInteger2);
             log.info("Given value equals: " + higherPriceInteger2);
@@ -306,13 +351,14 @@ public class MenuPage extends BasePage {
 
     public void checkProductInPriceRange(int lowerNumber, int higherNumber) {
         for (WebElement product : displayedProducts) {
-            WebElement productPrice = driver.findElement(By.xpath("//span[@class='price']"));
+            WebElement productPrice = product.findElement(By.xpath("//span[@class='price']"));
+            String productName = product.findElement(By.cssSelector(".h3.product-title a")).getText();
             String productText = productPrice.getText();
             String productPriceString = productText.substring(1, productText.length() - 3);
             int productPriceInt = Integer.parseInt(productPriceString);
             System.out.println(productPriceInt);
             if (productPriceInt <= higherNumber && productPriceInt >= lowerNumber) {
-                log.info("Product: " + product.getText() + " price belong to given price range.");
+                log.info("Product: " + productName + " price belong to given price range.");
             } else {
                 log.info("Product " + product.getText() + " price DOES NOT belong to given price range.");
             }

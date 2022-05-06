@@ -1,6 +1,8 @@
 import configuration.TestBase;
 import models.Cart;
 import models.Product;
+//import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.*;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -8,29 +10,28 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pages.*;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
 public class MyStoreTest extends TestBase {
     protected Logger log = LoggerFactory.getLogger("MyStoreTest.class");
-    protected HomePage homePage = new HomePage(driver);
-    protected MenuPage menuPage = new MenuPage(driver);
-    protected FooterPage footerPage = new FooterPage(driver);
-    protected ProductPage productPage = new ProductPage(driver);
-    protected SearchResultPage searchResultPage = new SearchResultPage(driver);
-    protected MenuCategory menuCategory = new MenuCategory(driver);
-    protected ShopCartPopupPage shopCartPopupPage = new ShopCartPopupPage(driver);
-    protected BasketPage basketPage = new BasketPage(driver);
-    protected CartPage cartPage = new CartPage(driver);
-
+    protected HomePage homePage;
+    protected MenuPage menuPage;
+    protected FooterPage footerPage;
+    protected ProductPage productPage;
+    protected SearchResultPage searchResultPage;
+//    protected MenuCategory menuCategory;
+    protected ShopCartPopupPage shopCartPopupPage;
+    protected BasketPage basketPage;
+    protected CartPage cartPage;
+    protected CreateAccountPage createAccountPage;
 
     @Test
     public void visibilityOfProductNameInSearchBoxTest() throws InterruptedException {
-
+        menuPage = new MenuPage(driver);
+        homePage = new HomePage(driver);
         String expectedName = homePage.getRandomProduct().getText();
         menuPage.enterProductNameIntoSearchField(expectedName);
         List<String> foundProducts = menuPage.getSearchDropdownResults();
@@ -47,12 +48,15 @@ public class MyStoreTest extends TestBase {
 
     @Test
     public void searchRandomProductTest() throws InterruptedException {
+        menuPage = new MenuPage(driver);
+        homePage = new HomePage(driver);
+        searchResultPage = new SearchResultPage(driver);
 
         String productsName = homePage.getProductsName(homePage.getRandomProduct());
         System.out.println(productsName);
         log.info("***** Random product is chosen *****");
         menuPage.enterProductNameIntoSearchField(productsName);
-        log.info("***** Products name in typed into the search box *****");
+        log.info("***** Products name is typed into the search box *****");
         menuPage.clickLensButtonToSearch();
         log.info("***** Search was submitted *****");
         searchResultPage.verifyVisibilityOfProduct(productsName);
@@ -61,22 +65,23 @@ public class MyStoreTest extends TestBase {
 
     @Test
     public void menuCategoriesTest() throws InterruptedException {
-
-        List<WebElement> menuOptions = menuPage.getMenuOptions();
-//        menuPage.verifyMainMenuOptions();
+        menuPage = new MenuPage(driver);
+//        List<WebElement> menuOptions = menuPage.getMenuOptions();
+        menuPage.verifyMainMenuOptions();
         menuPage.verifySubMenuOptions();
     }
 
 
     @Test
     public void filtersTest() throws InterruptedException {
+        menuPage = new MenuPage(driver);
         menuPage.selectCategory("Art");
         log.info("***** Art category was opened. *****");
         menuPage.moveLeftSlider(9);
         log.info("***** Slider was moved left, if it was necessary. *****");
         menuPage.moveRightSlider(10);
         log.info("***** Slider was moved right, if it was necessary. Price range was selected. *****");
-        menuPage.checkProductInPriceRange(10, 24);
+        menuPage.checkProductInPriceRange(9, 10);
         log.info("***** Products have been verified in terms of price. ***** ");
         menuPage.clearFilters();
         log.info("***** Filters ale cleared. *****");
@@ -85,6 +90,9 @@ public class MyStoreTest extends TestBase {
 
     @Test
     public void pricesDropTest() {
+        menuPage = new MenuPage(driver);
+        footerPage = new FooterPage(driver);
+        productPage = new ProductPage(driver);
         footerPage.choosePricesDropOption();
         log.info("***** Drop prices option was chosen *****");
         footerPage.verifyIfOnSalePageIsLoaded();
@@ -105,10 +113,14 @@ public class MyStoreTest extends TestBase {
 
     @Test
     public void addingProductToShoppingCartTests() throws InterruptedException, IOException, AWTException {
+        menuPage = new MenuPage(driver);
+//        menuCategory = new MenuCategory(driver);
+        productPage = new ProductPage(driver);
+        shopCartPopupPage = new ShopCartPopupPage(driver);
 
         int basketAmount = productPage.getBasketAmount();
         while (basketAmount < 15) {
-            menuCategory.getRandomCategory();
+            menuPage.getRandomCategory();
             log.info("***** Random category is chosen *****");
             menuPage.selectRandomProduct();
             log.info("***** Random product is chosen *****");
@@ -142,27 +154,43 @@ public class MyStoreTest extends TestBase {
 
     @Test
     public void basketFunctionalityTest() throws InterruptedException, IOException, AWTException {
+        productPage = new ProductPage(driver);
+        cartPage = new CartPage(driver);
+        basketPage = new BasketPage(driver);
+
         List<Product> selectedProductsList = productPage.addRandomProductWithVerification(3);
         Cart cart = new Cart(driver, selectedProductsList);
         basePage.openBasket();
+        Cart basketCart = new Cart(driver,basketPage.getProductInfoFromBasket());
 
         try {
-            //produkty moga sie powtarzać, tylko w koszyku trzeba to wziąć pod uwagę że rodzajów produktu będzie mniej
-            Assert.assertEquals(productPage.getProductInfoFromProductPage(cart), basketPage.getProductInfoFromBasket());
-            System.out.println("Lists consist of equal values");
+//            Assert.assertEquals(productPage.getProductInfoFromProductPage(cart), basketPage.getProductInfoFromBasket());
+//            Assert.assertEquals(cart,basketCart);
+            assertThat(cart).usingRecursiveComparison().isEqualTo(basketCart);
+            log.info("Lists consist of equal values");
         } catch (Throwable e) {
-            System.err.println("Lists are not equal. " + e.getMessage());
+            log.info("Lists are not equal. " + e.getMessage());
         }
 
         cartPage.verifyShippingCost(cart);
-        basketPage.increaseAmountOfProduct(1, "5");
+        basketPage.increaseAmountOfProduct(1, 5);
         basketPage.verifyTotalCost(cart);
         basketPage.verifyIncreasedQuantityChange(2);
-        //sprawdzenie poprawności całkowitego kosztu
         basketPage.verifyTotalCost(cart);
         basketPage.verifyDecreasedQuantityChange(2);
-        //sprawdzenie poprawności całkowitego kosztu
         basketPage.verifyTotalCost(cart);
+        basketPage.removeAllProducts();
+
+    }
+
+    @Test
+    public void checkoutTest(){
+        createAccountPage = new CreateAccountPage(driver);
+        homePage = new HomePage(driver);
+
+        homePage.choseSignInOption();
+        homePage.choseRegisterOption();
+        createAccountPage.fillInTheForm(System.getProperty("gender"), System.getProperty("firstName"), System.getProperty("secondName"), System.getProperty("mail"));
 
     }
 }

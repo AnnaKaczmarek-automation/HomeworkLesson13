@@ -5,12 +5,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 public class HomePage extends BasePage {
-
+    public HomePage(WebDriver driver) {
+        super(driver);
+    }
 
 
     @FindBy(xpath = "//div[@class='product']/article[@class='product-miniature js-product-miniature']/div[@class='thumbnail-container reviews-loaded']/div[@class='product-description']/h3[@class='h3 product-title']/a")
@@ -22,13 +23,15 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='product-description']/h3/a")
     private List<WebElement> productsNameList;
 
-    public HomePage(WebDriver driver) {
-        super(driver);
-    }
+    @FindBy(xpath = "//span[text()='Sign in']")
+    private WebElement signInBtn;
+
+    @FindBy(css = ".no-account a")
+    private WebElement registerBtn;
 
 
     public WebElement getRandomProduct() {
-        int sizeOfList = ListOfProducts.size();
+//        int sizeOfList = ListOfProducts.size();
 //        System.out.println(sizeOfList);
 //        int randomProductIndex = ThreadLocalRandom.current().nextInt(sizeOfList) % ListOfProducts.size();
 //        WebElement randomProduct = ListOfProducts.get(randomProductIndex);
@@ -50,7 +53,14 @@ public class HomePage extends BasePage {
         String actualProductName = dropdownResult.getText();
         String expectedProductName = selectedElement.getText();
         Assert.assertEquals(expectedProductName, actualProductName);
+    }
 
+    public void choseSignInOption(){
+        clickOnElement(signInBtn);
+    }
+
+    public void choseRegisterOption(){
+        clickOnElement(registerBtn);
     }
 
 

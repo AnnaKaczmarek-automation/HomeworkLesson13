@@ -21,11 +21,12 @@ public class ProductPage extends BasePage {
     public ProductPage(WebDriver driver) {
         super(driver);
     }
-//    private ShopCartPopupPage shopCartPopupPage;
+
+    //    private ShopCartPopupPage shopCartPopupPage;
     private Logger log = LoggerFactory.getLogger("ProductPage.class");
-    private MenuCategory menuCategory = new MenuCategory(driver);
-    private  MenuPage menuPage = new MenuPage(driver);
-    private ShopCartPopupPage shopCartPopupPage= new ShopCartPopupPage(driver);
+//    private MenuCategory menuCategory = new MenuCategory(driver);
+    private MenuPage menuPage = new MenuPage(driver);
+    private ShopCartPopupPage shopCartPopupPage = new ShopCartPopupPage(driver);
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private List<Product> selectedProductsList = new ArrayList<>();
 
@@ -101,20 +102,49 @@ public class ProductPage extends BasePage {
     public List<String> getProductInfoFromProductPage(Cart cart) {
         List<String> productPageValues = new ArrayList<>();
         DecimalFormat dFormat = new DecimalFormat("#,###.##");
+        int quantity = 0;
         for (Product product : cart.getProductsList()) {
-            productPageValues.add(product.getName());
-            log.info("Product price before formatting is :" +product.getPrice());
-            double productPrice = Double.parseDouble(dFormat.format(product.getPrice()));
+            //jesli product jest na liście to tylko zwiększ quantity i weź nową totalPrice
+            if(cart.getProductsList().contains(product.getName())){
+                quantity = quantity +product.getQuantity();
+                log.info("quantity number is: " + quantity);
+                productPageValues.add(String.valueOf(quantity));
+                double totalPriceDouble = Double.parseDouble(dFormat.format(product.getTotalPrice()*quantity));
+                productPageValues.add(String.valueOf(totalPriceDouble));
+            }
+            if(!cart.getProductsList().contains(product.getName())) {
+                //jesli produkt nie jest na liście to zrób wszystkie akcje
+                productPageValues.add(product.getName());
+                log.info("Product price before formatting is :" + product.getPrice());
+                double productPrice = Double.parseDouble(dFormat.format(product.getPrice()));
 //            double productPrice = StringConverter.covertStringIntoDouble(product.getPrice());
-            log.info("Product price is " + productPrice);
-            productPageValues.add(String.valueOf(productPrice));
-            log.info("quantity number is: " + product.getQuantity());
-            productPageValues.add(String.valueOf(product.getQuantity()));
-            double totalPriceDouble = Double.parseDouble(dFormat.format(product.getTotalPrice()));
-            productPageValues.add(String.valueOf(totalPriceDouble));
+                log.info("Product price is " + productPrice);
+                productPageValues.add(String.valueOf(productPrice));
+                log.info("quantity number is: " + product.getQuantity());
+                productPageValues.add(String.valueOf(product.getQuantity()));
+                double totalPriceDouble = Double.parseDouble(dFormat.format(product.getTotalPrice()));
+                productPageValues.add(String.valueOf(totalPriceDouble));
+            }
         }
         return productPageValues;
     }
+
+    public void getProductInfoWithRepeatedProducts(Cart cart){
+        List<String> productInfo = getProductInfoFromProductPage(cart);
+        for(int i =0; i < productInfo.size(); i++) {
+            if (productInfo.contains(productInfo.get(i))) {
+                System.out.println(productInfo.get(i)+" is duplicated");
+            }
+
+        }
+
+//        for(int i=0 ; i < productInfo.size() ; i++){
+//            if (!productInfo.contains(productInfo.get(i))){
+//                productInfo.get(i).
+//            }
+        }
+
+
 
     public List<Product> addRandomProductWithVerification(int productAmount) throws InterruptedException, IOException, AWTException {
         int basketAmount = getBasketAmount();
@@ -127,19 +157,9 @@ public class ProductPage extends BasePage {
         WebElement randomProduct = null;
 
         while (selectedProductsList.size() < productAmount) {
-            menuCategory.getRandomCategory();
+            menuPage.getRandomCategory();
             log.info("***** Random category is chosen *****");
             randomProduct = menuPage.selectRandomProduct();
-
-            if (!selectedProductsList.isEmpty()) {
-                for (Product product : selectedProductsList) {
-                    if (product.getName() == randomProduct.findElement(By.cssSelector(".h3.product-title a")).getText()) {
-                        menuCategory.getRandomCategory();
-                        randomProduct = menuPage.selectRandomProduct();
-                        log.info("***** This product is already on the list *****");
-                    }
-                }
-            }
             clickOnElement(randomProduct);
             log.info("***** Random product is chosen *****");
 
@@ -152,7 +172,14 @@ public class ProductPage extends BasePage {
             totalPrice = price * quantity;
 
             Product product = new Product(productName, price, quantity, totalPrice, driver);
-            selectedProductsList.add(product);
+            if(!selectedProductsList.contains(product.getName())){
+                selectedProductsList.add(product);
+            }
+            if(selectedProductsList.contains(product.getName())){
+                quantity = product.getQuantity()+quantity;
+                totalPrice = product.getPrice()*quantity;
+            }
+//            selectedProductsList.add(product);
 
             String parentWindowHandler = driver.getWindowHandle();
             log.info("Parent window id is: " + parentWindowHandler);
@@ -164,15 +191,14 @@ public class ProductPage extends BasePage {
             log.info("***** Product data are correct *****");
             shopCartPopupPage.continueShopping();
             log.info("***** Continue shopping button was chosen *****");
-            driver.switchTo().window(parentWindowHandler);
-            log.info("***** Popup window is closed *****");
+//            driver.switchTo().window(parentWindowHandler);
+//            log.info("***** Popup window is closed *****");
 
             int refreshedBasketAmount = getBasketAmount();
             log.info("Actual amount of products in basket is: " + refreshedBasketAmount);
             Assert.assertNotEquals(basketAmount, refreshedBasketAmount);
             log.info("***** Amount of products in basket correctly differentiate from the initial one *****");
             basketAmount = getBasketAmount();
-            System.out.println("size of product list on product page equals: " + selectedProductsList.size());
         }
         return selectedProductsList;
     }
