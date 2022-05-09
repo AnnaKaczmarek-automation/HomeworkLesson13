@@ -1,0 +1,9 @@
+[main] I ProductPage.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: HUMMINGBIRD VECTOR
+[main] I ShopCartPopupPage.class - ( Actual product price is: 9.0
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I ShopCartPopupPage.class - ( ***** Product data are correct *****
+[main] I BasketPage.class - ( Button 'Proceed to checkout' was chosen
+[main] I CheckOutPage.class - ( Address form is displayed
+[main] I CheckOutPage.class - ( 

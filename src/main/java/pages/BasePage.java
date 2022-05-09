@@ -1,4 +1,6 @@
 package pages;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webListener.WebListener;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class BasePage {
@@ -78,6 +81,14 @@ public class BasePage {
     public void waitUntilElementIsClickable(WebElement element){
         highlightElements(element);
         wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    public String createRandomMailAddress(){
+        FakeValuesService fakeValuesService = new FakeValuesService(
+                new Locale("en-GB"), new RandomService());
+
+        String email = fakeValuesService.bothify("????##@gmail.com");
+        return email;
     }
 
     public void highlightElements(WebElement element){
@@ -144,5 +155,7 @@ public class BasePage {
         element.sendKeys(input);
     }
 
-
-   }
+//    public void waitUntilRefresh(){
+//        wait.until(ExpectedConditions.refreshed());
+//    }
+}

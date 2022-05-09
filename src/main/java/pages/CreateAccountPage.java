@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.YEARS;
 
-public class CreateAccountPage extends BasePage{
+public class CreateAccountPage extends BasePage {
     private com.github.rkumsher.date.RandomDateUtils RandomDateUtils;
 
     public CreateAccountPage(WebDriver driver) {
@@ -53,20 +53,17 @@ public class CreateAccountPage extends BasePage{
     @FindBy(xpath = "//input[@type='checkbox'][@name='customer_privacy']")
     private WebElement customerPrivacyBtn;
 
-    public void fillInTheForm(String gender, String name, String lastName, String mail){
+    public void fillInTheForm(String gender, String name, String lastName, String mail) {
         waitUntilVisibilityOfElement(registerSection);
-        if(gender.equals("male")){
+        if (gender.equals("male")) {
             highlightElements(mrRadioBtn);
             mrRadioBtn.click();
-//            clickOnElement(mrRadioBtn);
         }
-        if(gender.equals("female")){
+        if (gender.equals("female")) {
             highlightElements(mrRadioBtn);
             mrsRadioBtn.click();
-//            clickOnElement(mrsRadioBtn);
         }
         log.info("Gender radiobutton was chosen");
-
         nameInput.sendKeys(name);
         log.info("Name is typed in");
         lastNameInput.sendKeys(lastName);
@@ -82,11 +79,7 @@ public class CreateAccountPage extends BasePage{
         acceptingPolicyBtn.click();
         customerPrivacyBtn.click();
         saveBtn.click();
-//        clickOnElement(saveBtn);
         log.info("Save button was chosen");
-
-
-
     }
 
     private String generateRandomDate() {
@@ -103,8 +96,7 @@ public class CreateAccountPage extends BasePage{
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             int randomIndex = random.nextInt(chars.length());
             sb.append(chars.charAt(randomIndex));
         }

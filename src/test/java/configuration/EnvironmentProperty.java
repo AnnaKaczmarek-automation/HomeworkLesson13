@@ -23,8 +23,18 @@ public class EnvironmentProperty {
     private final configuration.BrowserEnvironment browserEnvironment;
     private String firstName = "Karolina";
     private String secondName = "Kowalska";
-    private String mail = "karolina@wp.pl";
     private String gender = "female";
+    private String alias = "Kowal";
+    private String company = "Sii";
+    private String street = "Happy";
+    private String addressNumber = "15a";
+    private String city = "Rome";
+    private String state = "Hawaii";
+    private String postalCode = "43-472";
+    private String country = "Poland";
+    private String shippingMethod = "shop";
+    private String payment = "bank";
+
 
 
     private EnvironmentProperty() {
@@ -38,8 +48,17 @@ public class EnvironmentProperty {
     public void initProperties(){
         this.firstName = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.firstName;
         this.secondName = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.secondName;
-        this.mail = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.mail;
         this.gender = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.gender;
+        this.alias = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.alias;
+        this.company = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.company;
+        this.street = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.street;
+        this.addressNumber = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.addressNumber;
+        this.city = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.city;
+        this.state = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.state;
+        this.postalCode = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.postalCode;
+        this.country = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.country;
+        this.shippingMethod = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.shippingMethod;
+        this.payment = PropertiesStore.ENVIRONMENT.isSpecified() ? PropertiesStore.ENVIRONMENT.getValue() : this.payment;
 
 
     }

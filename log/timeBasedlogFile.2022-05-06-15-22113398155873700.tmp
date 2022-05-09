@@ -1,0 +1,18 @@
+[main] D EnvironmentProperty - ( >>>>>>> Environment name : env_int
+[main] D EnvironmentProperty - ( #### Loading property from uri file:/C:/Selenium_Java_course/HomeworkLesson13/target/classes/env_int
+[main] D EnvironmentProperty - ( ****Loading environment property firstName = Ania 
+[main] D EnvironmentProperty - ( ****Loading environment property env_name = int 
+[main] D EnvironmentProperty - ( ****Loading environment property mail = ania@gmail.com 
+[main] D EnvironmentProperty - ( ****Loading environment property gender = male 
+[main] D EnvironmentProperty - ( ****Loading environment property eTitle = Selenium 
+[main] D EnvironmentProperty - ( ****Loading environment property appUrl = http://146.59.32.4/index.php 
+[main] D EnvironmentProperty - ( ****Loading environment property secondName = Kaczmarek 
+[main] D EnvironmentProperty - ( #### Properties loaded from env_int : 7 
+[main] D i.g.b.wdm.cache.ResolutionCache - ( Resolution chrome=100 in cache (valid until 15:28:12 06/05/2022 CEST)
+[main] D i.g.b.wdm.cache.ResolutionCache - ( Resolution chrome100=100.0.4896.60 in cache (valid until 08:35:45 07/05/2022 CEST)
+[main] I i.g.bonigarcia.wdm.WebDriverManager - ( Using chromedriver 100.0.4896.60 (resolved driver for Chrome 100)
+[main] D i.g.bonigarcia.wdm.WebDriverManager - ( Driver chromedriver 100.0.4896.60 found in cache
+[main] I i.g.bonigarcia.wdm.WebDriverManager - ( Exporting webdriver.chrome.driver as C:\Users\kaczmaa5\.cache\selenium\chromedriver\win32\100.0.4896.60\chromedriver.exe
+[main] I ProductPage.class - ( ***** Random category is chosen *****
+[main] I ProductPage.class - ( ***** Random product is chosen *****
+[main] I ProductPage.class - ( ***** Amount of products was types in *****

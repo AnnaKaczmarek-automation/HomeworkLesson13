@@ -1,5 +1,6 @@
 package pages;
 
+import models.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -56,15 +58,27 @@ public class ShopCartPopupPage extends BasePage {
     @FindBy(xpath = "//button[@class='btn btn-secondary']")
     private WebElement continueShoppingBtn;
 
+    @FindBy(css = ".btn.btn-primary .material-icons.rtl-no-flip")
+    private WebElement proceedToCheckoutBtn;
+
     public WebElement getShopCartPopUp() {
         return shopCartPopUp;
     }
 
-    public void continueShopping() {
-        clickOnElement(continueShoppingBtn);
+    public void proceedToCheckoutBtn() {
+        clickOnElement(proceedToCheckoutBtn);
     }
 
-    public void verifyShopCartData(String name, double price, int quantity) throws InterruptedException, IOException, AWTException {
+    public void continueShopping() {
+        clickOnElement(continueShoppingBtn);
+        log.info("***** Continue shopping button was chosen *****");
+    }
+
+    public Integer getNumberFromItemsAmountInfo() {
+        int number = Integer.parseInt(itemsAmountInfo.getText().replaceAll("[^0-9]", ""));
+        return number;
+    }
+    public void verifyShopCartData(Product product) throws InterruptedException, IOException, AWTException {
         waitUntilVisibilityOfElement(shopCartPopUp);
         highlightElements(displayedName);
         String actualProductName = displayedName.getText();
@@ -116,10 +130,12 @@ public class ShopCartPopupPage extends BasePage {
             softAssertions.assertThat(actualTotalAmount).isEqualTo(totalAmount);
         }
 
-        softAssertions.assertThat(actualProductName).isEqualTo(name);
-        softAssertions.assertThat(actualProductPrice).isEqualTo(price);
-        softAssertions.assertThat(actualQuantity).isEqualTo(quantity);
-        softAssertions.assertThat(numberInAmountInfo).isEqualTo(quantity);
+        softAssertions.assertThat(actualProductName).isEqualTo(product.getName());
+        softAssertions.assertThat(actualProductPrice).isEqualTo(product.getPrice());
+        softAssertions.assertThat(actualQuantity).isEqualTo(product.getQuantity());
+        softAssertions.assertThat(numberInAmountInfo).isEqualTo(product.getQuantity());
+
+        log.info("***** Product data are correct *****");
     }
 
     public void switchToOpenedWindow(String parentWindow, WebElement popup) {

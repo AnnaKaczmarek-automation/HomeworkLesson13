@@ -1,0 +1,6 @@
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I ShopCartPopupPage.class - ( ***** Product data are correct *****
+[main] I ShopCartPopupPage.class - ( ***** Continue shopping button was chosen *****
+[main] I MyStoreTest.class - ( ***** Continue shopping button was chosen *****
+[main] I MyStoreTest.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
+[main] I MenuPage.class - ( ***** Random category is chosen *****

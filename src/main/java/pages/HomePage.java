@@ -41,15 +41,12 @@ public class HomePage extends BasePage {
 
     }
 
-
-
     public String getProductsName(WebElement element){
         String productsName = String.valueOf(element.findElement(By.xpath("//div[@class='product-description']/h3/a")).getText());
         return productsName;
     }
 
     public void verifyProductInSearchDropdown(WebElement selectedElement) {
-
         String actualProductName = dropdownResult.getText();
         String expectedProductName = selectedElement.getText();
         Assert.assertEquals(expectedProductName, actualProductName);

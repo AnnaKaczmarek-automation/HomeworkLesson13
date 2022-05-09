@@ -73,16 +73,13 @@ public class MenuPage extends BasePage {
 
     Logger log = LoggerFactory.getLogger("MenuPage.class");
 
-    public Integer getAmountOfCategories(List<WebElement> categories) {
-        int categoriesAmount = categories.size();
-        return categoriesAmount;
+    public  void chooseRandomCategoryAndProduct(){
+        getRandomCategory();
+        log.info("***** Random category is chosen *****");
+        WebElement randomProduct = selectRandomProduct();
+        clickOnElement(randomProduct);
+        log.info("***** Random product is chosen *****");
     }
-
-    public List<WebElement> getSubCategoriesList(WebElement category) {
-        List<WebElement> subCategoriesList = category.findElements(By.xpath(".//div[@class='popover sub-menu js-sub-menu collapse']/ul[@class='top-menu']/li/a"));
-        return subCategoriesList;
-    }
-
     public void getRandomCategory() {
         clickOnElement(getRandomElement(categoriesList));
     }
@@ -91,7 +88,6 @@ public class MenuPage extends BasePage {
         waitUntilVisibilityOfElement(lensButton);
         clickOnElement(lensButton);
     }
-
 
     public List<String> getSearchDropdownResults() {
         List<String> resultNamesList = new ArrayList<>();
@@ -109,15 +105,6 @@ public class MenuPage extends BasePage {
     public List<WebElement> getMenuOptions() {
         return categoriesList;
     }
-
-//    public List<WebElement> getSubMenuOptions(List<WebElement> categoriesList){
-//        List<WebElement> subCategories;
-//        for (WebElement mainCategory : categoriesList) {
-//            mainCategory.findElements()
-//        }
-//
-//        return subCategories;
-//    }
 
     public void verifyMainMenuOptions() {
         List<WebElement> menuOptions = getMenuOptions();
@@ -409,6 +396,7 @@ public class MenuPage extends BasePage {
     }
 
     public WebElement selectRandomProduct() {
+        waitUntilVisibilityOfAllElements(displayedProducts);
         WebElement randomElement = getRandomElement(displayedProducts);
         return randomElement;
     }

@@ -1,0 +1,4 @@
+[main] I ShopCartPopupPage.class - ( ***** Product data are correct *****
+[main] I BasketPage.class - ( Button 'Proceed to checkout' was chosen
+[main] I CheckOutPage.class - ( Address form is displayed
+[main] I CheckOutPage.class - ( 

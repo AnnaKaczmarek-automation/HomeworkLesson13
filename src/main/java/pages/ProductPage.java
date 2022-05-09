@@ -1,10 +1,8 @@
 package pages;
 
-import helpers.StringConverter;
 import models.Cart;
 import models.Product;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -70,19 +68,21 @@ public class ProductPage extends BasePage {
         double valueOfDiscount = calculateDiscount(regularPriceDouble, discountPercentage);
         double priceAfterDiscount = Double.parseDouble(df.format(regularPriceDouble - valueOfDiscount));
         assertIfEquals(String.valueOf(discountedPriceDisplayed), String.valueOf(priceAfterDiscount));
-
     }
 
     public void setProductAmount(String amount) {
         amountInput.clear();
         amountInput.sendKeys(amount);
+        log.info("***** Amount of products was types in *****");
+
     }
 
     public void addProductToCart() throws InterruptedException {
         clickOnElement(addToCartBtn);
         Thread.sleep(5000);
-    }
+        log.info("***** Product was added to cart *****");
 
+    }
 
     public String getProductName() {
         String productName = displayedProduct.getText();
@@ -129,79 +129,36 @@ public class ProductPage extends BasePage {
         return productPageValues;
     }
 
-    public void getProductInfoWithRepeatedProducts(Cart cart){
-        List<String> productInfo = getProductInfoFromProductPage(cart);
-        for(int i =0; i < productInfo.size(); i++) {
-            if (productInfo.contains(productInfo.get(i))) {
-                System.out.println(productInfo.get(i)+" is duplicated");
-            }
-
-        }
-
-//        for(int i=0 ; i < productInfo.size() ; i++){
-//            if (!productInfo.contains(productInfo.get(i))){
-//                productInfo.get(i).
+//     public List<Product> addRandomProductWithVerification(int productAmount, Cart cart) throws InterruptedException, IOException, AWTException {
+//        int basketAmount = getBasketAmount();
+//
+//        while (selectedProductsList.size() < productAmount) {
+//           menuPage.chooseRandomCategoryAndProduct();
+//
+//            String amount = "1";
+//            setProductAmount(amount);
+//
+//            Product product = new Product(getProductName(), getProductDiscPrice(), Integer.parseInt(amount), getProductDiscPrice() * Integer.parseInt(amount));
+//            cart.addNewProduct(product);
+//            addProductToCart();
+//            shopCartPopupPage.switchToLastOpenedWindow();
+//            shopCartPopupPage.verifyShopCartData(product);
+//
+//            //więcej rzeczy przenieśc do testu, pętla w tescie, otwarcie kategorii i dodanie produktu w teście
+//            if(selectedProductsList.size() == productAmount){
+//                shopCartPopupPage.proceedToCheckoutBtn();
+//            } else {
+//                shopCartPopupPage.continueShopping();
+//                log.info("***** Continue shopping button was chosen *****");
+//
+//                int refreshedBasketAmount = getBasketAmount();
+//                log.info("Actual amount of products in basket is: " + refreshedBasketAmount);
+//                Assert.assertNotEquals(basketAmount, refreshedBasketAmount);
+//                log.info("***** Amount of products in basket correctly differentiate from the initial one *****");
+//                basketAmount = getBasketAmount();
 //            }
-        }
-
-
-
-    public List<Product> addRandomProductWithVerification(int productAmount) throws InterruptedException, IOException, AWTException {
-        int basketAmount = getBasketAmount();
-
-        String productName = null;
-        int quantity = 0;
-        double price = 0;
-        double totalPrice = 0;
-        List<Product> selectedProductsList = new ArrayList<>();
-        WebElement randomProduct = null;
-
-        while (selectedProductsList.size() < productAmount) {
-            menuPage.getRandomCategory();
-            log.info("***** Random category is chosen *****");
-            randomProduct = menuPage.selectRandomProduct();
-            clickOnElement(randomProduct);
-            log.info("***** Random product is chosen *****");
-
-            String amount = "1";
-            setProductAmount(amount);
-            log.info("***** Amount of products was types in *****");
-            productName = getProductName();
-            price = getProductDiscPrice();
-            quantity = Integer.parseInt(amount);
-            totalPrice = price * quantity;
-
-            Product product = new Product(productName, price, quantity, totalPrice, driver);
-            if(!selectedProductsList.contains(product.getName())){
-                selectedProductsList.add(product);
-            }
-            if(selectedProductsList.contains(product.getName())){
-                quantity = product.getQuantity()+quantity;
-                totalPrice = product.getPrice()*quantity;
-            }
-//            selectedProductsList.add(product);
-
-            String parentWindowHandler = driver.getWindowHandle();
-            log.info("Parent window id is: " + parentWindowHandler);
-            addProductToCart();
-            log.info("***** Product was added to cart *****");
-
-            shopCartPopupPage.switchToLastOpenedWindow();
-            shopCartPopupPage.verifyShopCartData(productName, price, quantity);
-            log.info("***** Product data are correct *****");
-            shopCartPopupPage.continueShopping();
-            log.info("***** Continue shopping button was chosen *****");
-//            driver.switchTo().window(parentWindowHandler);
-//            log.info("***** Popup window is closed *****");
-
-            int refreshedBasketAmount = getBasketAmount();
-            log.info("Actual amount of products in basket is: " + refreshedBasketAmount);
-            Assert.assertNotEquals(basketAmount, refreshedBasketAmount);
-            log.info("***** Amount of products in basket correctly differentiate from the initial one *****");
-            basketAmount = getBasketAmount();
-        }
-        return selectedProductsList;
-    }
-
+//        }
+//        return selectedProductsList;
+//    }
 
 }

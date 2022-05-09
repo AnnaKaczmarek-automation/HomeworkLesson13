@@ -3,15 +3,14 @@ package models;
 import org.openqa.selenium.WebDriver;
 import pages.BasePage;
 
-public class Product extends BasePage {
+public class Product {
 
     private String name;
     private double price;
     private int quantity;
     private double totalPrice;
 
-    public Product(String name, double price, int quantity, double totalPrice, WebDriver driver) {
-        super(driver);
+    public Product(String name, double price, int quantity, double totalPrice) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -34,5 +33,19 @@ public class Product extends BasePage {
         return quantity;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void addQuantity(int quantity){
+        this.quantity += quantity;
+    }
 }
