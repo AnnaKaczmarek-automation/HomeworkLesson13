@@ -1,8 +1,6 @@
 package pages;
-
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,11 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class CheckOutPage extends BasePage {
     public CheckOutPage(WebDriver driver) {
@@ -89,7 +84,13 @@ public class CheckOutPage extends BasePage {
     @FindBy(css = "#payment-option-1-container")
     private WebElement paymentCheckBtn;
 
-    @FindBy(css = "#payment-option-2-container")
+//    @FindBy(css = "#payment-option-2-container")
+//    private WebElement paymentBankBtn;
+
+    @FindBy(css = "#payment-option-2-additional-information section ")
+    private WebElement bankInfoSection;
+
+    @FindBy(css = "#payment-option-2")
     private WebElement paymentBankBtn;
 
     @FindBy(css = "#payment-option-1")
@@ -101,7 +102,9 @@ public class CheckOutPage extends BasePage {
     @FindBy(css = "#cta-terms-and-conditions-0")
     private WebElement termsInfo;
 
-    @FindBy(css = ".condition-label")
+//    @FindBy(css = ".condition-label")
+//    private WebElement termsBtn;
+    @FindBy(css = "#conditions-to-approve ul li")
     private WebElement termsBtn;
 
     @FindBy(css = ".modal.fade.in .modal-content")
@@ -207,11 +210,13 @@ public class CheckOutPage extends BasePage {
         System.out.println(chosenOption);
 
         if (chosenOption.equals("shop")){
-            clickOnElement(shippingShopOption);
+            waitUntilVisibilityOfElement(shippingShopOption);
+            shippingShopOption.click();
 
         }
         if(chosenOption.equals("delivery")){
-            clickOnElement(shippingDeliveryOption);
+            waitUntilVisibilityOfElement(shippingDeliveryOption);
+            shippingDeliveryOption.click();
         }
 
         clickOnElement(shippingContinueBtn);
@@ -230,11 +235,14 @@ public class CheckOutPage extends BasePage {
     public void choosePaymentOption() {
         String paymentOption = System.getProperty("payment");
         if(paymentOption.equals("check")){
-
-            clickOnElement(paymentCheckBtn);
+            paymentCheckBtn.click();
+            log.info("Payment option was chosen");
+            waitUntilVisibilityOfElement(bankInfoSection);
         }
         if(paymentOption.equals("bank")){
-            clickOnElement(paymentBankBtn);
+            paymentBankBtn.click();
+            log.info("Payment option was chosen");
+            waitUntilVisibilityOfElement(bankInfoSection);
         }
     }
 
@@ -242,9 +250,11 @@ public class CheckOutPage extends BasePage {
         String chosenOption = null;
         if(checkRadioBtn.isSelected()){
             chosenOption = paymentCheckBtn.findElement(By.xpath("//span[text()='Pay by Check']")).getText();
+            log.info(chosenOption + " was chosen payment option");
         }
         if(bankRadioBtn.isSelected()){
             chosenOption = paymentBankBtn.findElement(By.xpath("//span[text()='Pay by bank wire']")).getText();
+            log.info(chosenOption + " was chosen payment option");
         }
 
         return chosenOption;
@@ -265,18 +275,24 @@ public class CheckOutPage extends BasePage {
     }
     public void confirmTermsOfService(){
         clickOnElement(termsBtn);
-
+        log.info("Terms of use were checked");
     }
 
     public void choosePlaceOrderButton(){
-        if(termsBtn.isSelected()){
-            clickOnElement(placeOrderBtn);
-        }
+//        if(placeOrderBtn.isEnabled()){
+//            highlightElements(placeOrderBtn);
+//            clickOnElement(placeOrderBtn);
+//            log.info("Place order button was chosen");
+//            wait.until(ExpectedConditions.urlContains("order-confirmation"));
+//        }
+        waitUntilElementIsClickable(placeOrderBtn);
+        clickOnElement(placeOrderBtn);
+        log.info("Place order button was chosen");
     }
 
     public  void closeTermsOfUsePopup(){
-
         clickOnElement(crossBtn);
+        log.info("Terms of use popup was closed");
     }
 
     public void switchToLastOpenedWindow() {

@@ -1,0 +1,9 @@
+[main] I ShopCartPopupPage.class - ( ***** Product data are correct *****
+[main] I BasePage.class - ( Actual amount of products in basket is: 5
+[main] I BasketPage.class - ( Button 'Proceed to checkout' was chosen
+[main] I CheckOutPage.class - ( Address form is displayed
+[main] I CheckOutPage.class - ( 
+[main] I CheckOutPage.class - ( Payment option was chosen
+[main] I CheckOutPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I CheckOutPage.class - ( Terms of use popup was closed
+[main] I CheckOutPage.class - ( Terms of use were checked

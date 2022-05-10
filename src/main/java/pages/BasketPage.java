@@ -59,7 +59,7 @@ public class BasketPage extends BasePage {
     @FindBy(css = ".no-items")
     private WebElement noItemInfo;
 
-    @FindBy(css = "div.text-sm-center a")
+    @FindBy(css = ".text-sm-center .btn.btn-primary")
     private WebElement proceedToCheckOutBtn;
 
 

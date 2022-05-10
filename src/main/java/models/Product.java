@@ -1,8 +1,4 @@
 package models;
-
-import org.openqa.selenium.WebDriver;
-import pages.BasePage;
-
 public class Product {
 
     private String name;
@@ -45,7 +41,11 @@ public class Product {
         this.totalPrice = totalPrice;
     }
 
-    public void addQuantity(int quantity){
+    public void addQuantity(int quantity) {
         this.quantity += quantity;
+    }
+
+    public void updateTotalPrice(double price) {
+        this.totalPrice += price;
     }
 }

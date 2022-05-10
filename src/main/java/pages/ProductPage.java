@@ -3,6 +3,8 @@ package pages;
 import models.Cart;
 import models.Product;
 import org.junit.Assert;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,6 +29,7 @@ public class ProductPage extends BasePage {
     private ShopCartPopupPage shopCartPopupPage = new ShopCartPopupPage(driver);
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private List<Product> selectedProductsList = new ArrayList<>();
+    Dimension currentDimension = driver.manage().window().getSize();
 
     @FindBy(xpath = "//div[@class='col-md-6']/h1")
     private WebElement displayedProduct;
@@ -50,15 +53,18 @@ public class ProductPage extends BasePage {
 
     public void verifyVisibilityOfLabel() {
         verifyVisibilityOfElement("SAVE 20%", discountLabel);
+        log.info("***** Correct label is displayed *****");
     }
 
     public void verifyVisibilityOfRegularPrice() {
         assertVisibilityOfElement(regularPrice);
+        log.info("***** Regular price is displayed *****");
     }
 
 
     public void verifyVisibilityOfDiscountedPrice() {
         assertVisibilityOfElement(discountedPrice);
+        log.info("***** Discounted price is displayed *****");
     }
 
     public void verifyDiscount() {
@@ -68,6 +74,7 @@ public class ProductPage extends BasePage {
         double valueOfDiscount = calculateDiscount(regularPriceDouble, discountPercentage);
         double priceAfterDiscount = Double.parseDouble(df.format(regularPriceDouble - valueOfDiscount));
         assertIfEquals(String.valueOf(discountedPriceDisplayed), String.valueOf(priceAfterDiscount));
+        log.info("Discount was correctly applied");
     }
 
     public void setProductAmount(String amount) {
@@ -78,10 +85,21 @@ public class ProductPage extends BasePage {
     }
 
     public void addProductToCart() throws InterruptedException {
-        clickOnElement(addToCartBtn);
-        Thread.sleep(5000);
-        log.info("***** Product was added to cart *****");
+        try {
+            clickOnElement(addToCartBtn);
+            Thread.sleep(5000);
+            log.info("***** Product was added to cart *****");
 
+        } catch (TimeoutException e) {
+            Dimension dimension = driver.manage().window().getSize();
+            if(!dimension.equals(currentDimension)){
+                driver.manage().window().setSize(currentDimension);
+//                mouseHover(addToCartBtn);
+//                addToCartBtn.click();
+                clickOnElement(addToCartBtn);
+                log.info("***** Product was added to cart *****");
+            }
+        }
     }
 
     public String getProductName() {

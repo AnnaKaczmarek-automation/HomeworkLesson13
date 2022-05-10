@@ -1,0 +1,15 @@
+[main] I BasePage.class - ( Actual amount of products in basket is: 4
+[main] I MenuPage.class - ( ***** Random category is chosen *****
+[main] I MenuPage.class - ( ***** Product is selected *****
+[main] I MenuPage.class - ( ***** Random product is chosen *****
+[main] I ProductPage.class - ( ***** Amount of products was types in *****
+[main] I ProductPage.class - ( ***** Product was added to cart *****
+[main] I ShopCartPopupPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I ShopCartPopupPage.class - ( Actual product name is: MUG TODAY IS A GOOD DAY
+[main] I ShopCartPopupPage.class - ( Actual product price is: 11.9
+[main] I ShopCartPopupPage.class - ( Actual quantity of product in a cart is: 1
+[main] I ShopCartPopupPage.class - ( ***** Product data are correct *****
+[main] I ShopCartPopupPage.class - ( ***** Continue shopping button was chosen *****
+[main] I BasePage.class - ( Actual amount of products in basket is: 5
+[main] I MyStoreTest.class - ( ***** Amount of products in basket correctly differentiate from the initial one *****
+[main] I BasePage.class - ( Actual amount of products in basket is: 5

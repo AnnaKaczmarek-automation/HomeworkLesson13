@@ -1,7 +1,5 @@
 package models;
 
-import org.openqa.selenium.WebElement;
-
 public class User {
 
     private String firstName;
@@ -43,7 +41,6 @@ public class User {
             return this;
         }
 
-
         public User build() {
             User user = new User();
             user.firstName = this.firstName;
@@ -53,7 +50,6 @@ public class User {
             user.password = this.password;
             return user;
         }
-
     }
 }
 

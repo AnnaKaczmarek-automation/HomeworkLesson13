@@ -1,0 +1,26 @@
+[main] I CheckOutPage.class - ( <<<<<<<<<< Switch to last opened window
+[main] I CheckOutPage.class - ( Terms of use popup was closed
+[main] I CheckOutPage.class - ( Terms of use were checked
+[main] I CheckOutPage.class - ( Place order button was chosen
+[main] I MyStoreTest.class - ( Lists are not equal. 
+Expecting actual:
+  models.Cart@74d8a788
+to be equal to:
+  models.Cart@3ceb2d1c
+when recursively comparing field by field, but found the following difference:
+
+field/property 'productsList' differ:
+- actual value  : [models.Product@38fa54b2, models.Product@5c58fb97, models.Product@60caf876]
+- expected value: []
+actual and expected values are collections of different size, actual size=3 when expected size=0
+
+The recursive comparison was performed with this configuration:
+- no overridden equals methods were used in the comparison (except for java types)
+- these types were compared with the following comparators:
+  - java.lang.Double -> DoubleComparator[precision=1.0E-15]
+  - java.lang.Float -> FloatComparator[precision=1.0E-6]
+  - java.nio.file.Path -> lexicographic comparator (Path natural order)
+- actual and expected objects and their fields were compared field by field recursively even if they were not of the same type, this allows for example to compare a Person to a PersonDto (call strictTypeChecking(true) to change that behavior).
+
+[main] I MyStoreTest.class - ( Shipping method match chosen option in previous steps
+[main] I MyStoreTest.class - ( Payment method match chosen option in previous steps

@@ -1,16 +1,12 @@
 package models;
-
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
-
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static org.junit.Assert.assertTrue;
 
 public class UserFactory {
-
 
     public User.UserBuilder getRandomUser() {
 
@@ -41,10 +37,8 @@ public class UserFactory {
                 .birthDate(fakeBirthDate)
                 .email(fakeEmail)
                 .password(fakePassword);
-
         return user;
     }
-
 
     public User.UserBuilder getAlreadyRegisteredUser() {
         User.UserBuilder user = new User.UserBuilder()
@@ -53,8 +47,6 @@ public class UserFactory {
                 .birthDate("06.06.1988")
                 .email("kp@gmail.com")
                 .password("asdf1234");
-
         return user;
-
     }
 }

@@ -79,7 +79,6 @@ public class BasePage {
     }
 
     public void waitUntilElementIsClickable(WebElement element){
-        highlightElements(element);
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
@@ -91,6 +90,9 @@ public class BasePage {
         return email;
     }
 
+    public void waitUntilPageRefresh(WebElement element){
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(element)));
+    }
     public void highlightElements(WebElement element){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].setAttribute('style', 'background:orange; border:5px solid red;')", element);
@@ -142,6 +144,7 @@ public class BasePage {
         waitUntilVisibilityOfElement(basketAmount);
         String  number = basketAmount.getText();
         int numberInBasket = Integer.parseInt(number.replaceAll("[^0-9.]", ""));
+        log.info("Actual amount of products in basket is: " + numberInBasket);
         return numberInBasket;
     }
 
@@ -155,7 +158,5 @@ public class BasePage {
         element.sendKeys(input);
     }
 
-//    public void waitUntilRefresh(){
-//        wait.until(ExpectedConditions.refreshed());
-//    }
+//    public void
 }

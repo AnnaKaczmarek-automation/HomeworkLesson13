@@ -5,6 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
+    Logger log= LoggerFactory.getLogger("HomePage.class");
 
     @FindBy(xpath = "//div[@class='product']/article[@class='product-miniature js-product-miniature']/div[@class='thumbnail-container reviews-loaded']/div[@class='product-description']/h3[@class='h3 product-title']/a")
     private List<WebElement> ListOfProducts;
@@ -37,7 +40,9 @@ public class HomePage extends BasePage {
 //        WebElement randomProduct = ListOfProducts.get(randomProductIndex);
 //        return randomProduct;
         WebElement randomProduct = getRandomElement(ListOfProducts);
+        log.info("***** Random product is chosen *****");
         return randomProduct;
+
 
     }
 

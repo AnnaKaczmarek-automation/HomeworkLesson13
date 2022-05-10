@@ -87,6 +87,7 @@ public class MenuPage extends BasePage {
     public void clickLensButtonToSearch() {
         waitUntilVisibilityOfElement(lensButton);
         clickOnElement(lensButton);
+        log.info("***** Search was submitted *****");
     }
 
     public List<String> getSearchDropdownResults() {
@@ -99,6 +100,7 @@ public class MenuPage extends BasePage {
 
     public MenuPage enterProductNameIntoSearchField(String productName) throws InterruptedException {
         searchField.sendKeys(productName);
+        log.info("***** Products name is typed into the search box *****");
         return this;
     }
 
@@ -260,6 +262,7 @@ public class MenuPage extends BasePage {
             if (category.getText().equals(categoryName.toUpperCase())) {
                 highlightElements(category);
                 clickOnElement(category);
+                log.info("***** " + category + " category was opened. *****");
             }
         }
     }
@@ -287,6 +290,7 @@ public class MenuPage extends BasePage {
             Assert.assertEquals(number, lowerPriceInteger);
             log.info("Given value equals: " + lowerPriceInteger);
         }
+        log.info("***** Slider was moved left, if it was necessary. *****");
     }
 
     public void moveRightSlider(int number) {
@@ -334,6 +338,7 @@ public class MenuPage extends BasePage {
             Assert.assertEquals(number, higherPriceInteger2);
             log.info("Given value equals: " + higherPriceInteger2);
         }
+        log.info("***** Slider was moved right, if it was necessary. Price range was selected. *****");
     }
 
     public void checkProductInPriceRange(int lowerNumber, int higherNumber) {
@@ -350,11 +355,13 @@ public class MenuPage extends BasePage {
                 log.info("Product " + product.getText() + " price DOES NOT belong to given price range.");
             }
         }
+        log.info("***** Products have been verified in terms of price. ***** ");
     }
 
     public void clearFilters() {
         waitUntilElementIsClickable(clearFiltersBtn);
         clickOnElement(clearFiltersBtn);
+        log.info("***** Filters ale cleared. *****");
     }
 
     public void checkDiscountVisibility() {
@@ -362,15 +369,12 @@ public class MenuPage extends BasePage {
         if (displayedProducts.size() > 0) {
             for (WebElement product : displayedProducts) {
 
-                System.out.println(product.getText());
-
                 waitUntilVisibilityOfElement(product);
                 WebElement discount = product.findElement(By.xpath(".//ul[@class='product-flags']/li"));
                 String discountAmount = discount.getText();
                 String actualDiscountAmount = discountAmount.substring(1, discountAmount.length() - 1);
                 String expectedDiscountAmount = "20";
 
-//            String displayedProductName = productName.getText();
                 String displayedProductName = product.findElement(By.xpath(".//div[@class='product-description']/h2/a")).getText();
                 assertIfEquals(expectedDiscountAmount, actualDiscountAmount);
                 log.info("Correct discount was given to the product " + displayedProductName);
@@ -393,11 +397,13 @@ public class MenuPage extends BasePage {
         } else {
             log.info("Any product is displayed");
         }
+        log.info("***** Regular price, discount amount and discounted prices are correct *****");
     }
 
     public WebElement selectRandomProduct() {
         waitUntilVisibilityOfAllElements(displayedProducts);
         WebElement randomElement = getRandomElement(displayedProducts);
+        log.info("***** Product is selected *****");
         return randomElement;
     }
 
