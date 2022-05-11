@@ -1,19 +1,16 @@
 package pages;
 
-import models.Cart;
 import models.Product;
 import org.junit.Assert;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.rmi.server.ExportException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,7 @@ public class ProductPage extends BasePage {
     private ShopCartPopupPage shopCartPopupPage = new ShopCartPopupPage(driver);
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private List<Product> selectedProductsList = new ArrayList<>();
-    Dimension currentDimension = driver.manage().window().getSize();
+//    Dimension currentDimension = driver.manage().window().getSize();
 
     @FindBy(xpath = "//div[@class='col-md-6']/h1")
     private WebElement displayedProduct;
@@ -38,7 +35,6 @@ public class ProductPage extends BasePage {
 
     @FindBy(xpath = "//div[@class='product-discount']/span")
     private WebElement regularPrice;
-
 
     @FindBy(xpath = "//div[@class='current-price']/span[1]")
     private WebElement discountedPrice;
@@ -50,7 +46,10 @@ public class ProductPage extends BasePage {
     private WebElement addToCartBtn;
 
     public void verifyVisibilityOfLabel() {
-        verifyVisibilityOfElement("SAVE 20%", discountLabel);
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".discount.discount-percentage"))));
+        String displayedDiscount = discountLabel.getText().replaceAll("[^0-9]", "");
+        Assert.assertEquals(displayedDiscount, "20");
+        assertThat(displayedDiscount).isEqualTo("20");
         log.info("***** Correct label is displayed *****");
     }
 
@@ -58,7 +57,6 @@ public class ProductPage extends BasePage {
         assertVisibilityOfElement(regularPrice);
         log.info("***** Regular price is displayed *****");
     }
-
 
     public void verifyVisibilityOfDiscountedPrice() {
         assertVisibilityOfElement(discountedPrice);
@@ -76,8 +74,12 @@ public class ProductPage extends BasePage {
     }
 
     public void setProductAmount(String amount) {
-        amountInput.clear();
-        amountInput.sendKeys(amount);
+//        waitUntilVisibilityOfElement(amountInput);
+//        amountInput.clear();
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".product-add-to-cart")));
+        driver.findElement(By.cssSelector("#quantity_wanted")).clear();
+//        amountInput.sendKeys(amount);
+        driver.findElement(By.cssSelector("#quantity_wanted")).sendKeys(amount);
         log.info("***** Amount of products was types in *****");
     }
 

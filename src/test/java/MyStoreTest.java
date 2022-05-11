@@ -1,10 +1,10 @@
 import configuration.TestBase;
-import models.Address;
+
 import models.Cart;
 import models.Order;
 import models.Product;
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.Logger;
@@ -15,8 +15,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
+//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Execution(ExecutionMode.CONCURRENT)
-
 public class MyStoreTest extends TestBase {
     protected Logger log = LoggerFactory.getLogger("MyStoreTest.class");
     protected HomePage homePage;
@@ -34,6 +34,7 @@ public class MyStoreTest extends TestBase {
     protected TopMenuPage topMenuPage;
     protected OrderDetailsPage orderDetailsPage;
 
+    @DisplayName("Search box test")
     @Test
     public void visibilityOfProductNameInSearchBoxTest() throws InterruptedException {
         menuPage = new MenuPage(driver);
@@ -46,6 +47,7 @@ public class MyStoreTest extends TestBase {
         log.info("Correct product is visible in search box");
     }
 
+    @DisplayName("Searching random product test")
     @Test
     public void searchRandomProductTest() throws InterruptedException {
         menuPage = new MenuPage(driver);
@@ -58,6 +60,7 @@ public class MyStoreTest extends TestBase {
         searchResultPage.verifyVisibilityOfProduct(productsName);
     }
 
+    @DisplayName("Walking through all categories and subcategories test ")
     @Test
     public void menuCategoriesTest() {
         menuPage = new MenuPage(driver);
@@ -65,6 +68,7 @@ public class MyStoreTest extends TestBase {
         menuPage.verifySubMenuOptions();
     }
 
+    @DisplayName("Filters test")
     @Test
     public void filtersTest() throws InterruptedException {
         menuPage = new MenuPage(driver);
@@ -76,6 +80,7 @@ public class MyStoreTest extends TestBase {
         //dodac warunek co zrobic, jeśli poda sie zbyt wysoką liczbę
     }
 
+    @DisplayName("Prices drop test")
     @Test
     public void pricesDropTest() {
         menuPage = new MenuPage(driver);
@@ -91,6 +96,7 @@ public class MyStoreTest extends TestBase {
         productPage.verifyDiscount();
     }
 
+    @DisplayName("Shopping Cart test")
     @Test
     public void addingProductToShoppingCartTests() throws InterruptedException, IOException, AWTException {
         menuPage = new MenuPage(driver);
@@ -132,6 +138,7 @@ public class MyStoreTest extends TestBase {
         }
     }
 
+    @DisplayName("Basket functionality test")
     @Test
     public void basketFunctionalityTest() throws InterruptedException, IOException, AWTException {
         productPage = new ProductPage(driver);
@@ -189,10 +196,11 @@ public class MyStoreTest extends TestBase {
             basketPage.getQuantityOfDisplayedProducts();
             driver.navigate().refresh();
         }
-        assertThat(basketPage.getTotalOrderCost()).isEqualTo(cart.getTotalOrderCost(checkOutPage.getShippingValue()));
+        assertThat(basketPage.getTotalOrderCost()).isEqualTo(cart.getTotalOrderCost());//chyba bede musiała tutaj dodać wartośc dostawy. ale nie w metodzie tylko tutaj
         assertThat(basketPage.getNoItemNotification()).isEqualTo("There are no more items in your cart");
     }
 
+    @DisplayName("Checkout test")
     @Test
     public void checkoutTest() throws InterruptedException, IOException, AWTException {
         createAccountPage = new CreateAccountPage(driver);
@@ -214,9 +222,10 @@ public class MyStoreTest extends TestBase {
         menuPage.waitForMenuRefresh();
         int basketAmount = basketPage.getBasketAmount();
         Cart cart = new Cart();
+        String amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
         while (basketAmount < 5) {
             menuPage.chooseRandomCategoryAndProduct();
-            String amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
+//            String amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
 
             int maxvalue = basketAmount + Integer.parseInt(amount);
             while (maxvalue > 5) {
@@ -224,6 +233,7 @@ public class MyStoreTest extends TestBase {
                 maxvalue = basketAmount + Integer.parseInt(amount);
             }
             productPage.setProductAmount(amount);
+            System.out.println("typed amount was: " + amount);
             Thread.sleep(3000);
             Product product = new Product(productPage.getProductName(), productPage.getProductDiscPrice(), Integer.parseInt(amount), productPage.getProductDiscPrice() * Integer.parseInt(amount));
             cart.addNewProduct(product);
@@ -314,8 +324,6 @@ public class MyStoreTest extends TestBase {
         String invoiceAddress = orderDetailsPage.getInvoiceAddressDetails();
         assertThat(invoiceAddress).isEqualTo(deliveryAddress);
         log.info("Displayed details of delivery and invoice address are correct and equals.");
-
-
     }
 }
 

@@ -17,7 +17,10 @@ public class HomePage extends BasePage {
 
     Logger log= LoggerFactory.getLogger("HomePage.class");
 
-    @FindBy(xpath = "//div[@class='product']/article[@class='product-miniature js-product-miniature']/div[@class='thumbnail-container reviews-loaded']/div[@class='product-description']/h3[@class='h3 product-title']/a")
+//    @FindBy(xpath = "//div[@class='product']/article[@class='product-miniature js-product-miniature']/div[@class='thumbnail-container reviews-loaded']/div[@class='product-description']/h3[@class='h3 product-title']/a")
+//    private List<WebElement> ListOfProducts;
+
+    @FindBy(css = ".products.row article")
     private List<WebElement> ListOfProducts;
 
     @FindBy(xpath = "//ul[@id='ui-id-1']/li[@class='ui-menu-item']/a[@id='ui-id-6']/span[@class='product']")
