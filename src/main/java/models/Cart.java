@@ -1,4 +1,5 @@
 package models;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class Cart {
                 product.addQuantity(productToAdd.getQuantity());
             }
             if(product.getName().equals(productToAdd.getName())){
-                product.updateTotalPrice(productToAdd.getPrice());
+//                product.updateTotalPrice(productToAdd.getPrice());
+                product.updateTotalPrice(productToAdd.getTotalPrice());
             }
         }
     }
@@ -51,13 +53,18 @@ public class Cart {
         return false;
     }
 
-    public Double getTotalOrderCost() {
+    public Double getTotalOrderCost(double shipping) {
         double totalCost=0;
         double cost=0;
+        DecimalFormat dFormat = new DecimalFormat("#,###.##");
+
         for (Product product : getProductsList()) {
-            totalCost += product.getTotalPrice();
+            cost += product.getTotalPrice();
+
         }
-        totalCost = cost + 7.00;
+        double shippingCost = shipping;
+        double total = cost + shippingCost;
+        totalCost = Double.parseDouble(dFormat.format(total));
         return totalCost;
     }
 

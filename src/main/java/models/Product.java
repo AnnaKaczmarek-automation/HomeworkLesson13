@@ -45,7 +45,7 @@ public class Product {
         this.quantity += quantity;
     }
 
-    public void updateTotalPrice(double price) {
-        this.totalPrice += price;
+    public void updateTotalPrice(double totalPrice) {
+        this.totalPrice += totalPrice;
     }
 }

@@ -138,18 +138,6 @@ public class ShopCartPopupPage extends BasePage {
         log.info("***** Product data are correct *****");
     }
 
-    public void switchToOpenedWindow(String parentWindow, WebElement popup) {
-        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(shopCartPopUp));
-        Set<String> childWindows = driver.getWindowHandles();
-        int count = childWindows.size();
-        for (String child : childWindows) {
-            if (!parentWindow.equalsIgnoreCase(child)) {
-                System.out.println("childs window id is: " + child);
-                driver.switchTo().window(child);
-            }
-        }
-    }
-
     public void switchToLastOpenedWindow() {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='blockcart-modal']/div[@class='modal-dialog']/div[@class='modal-content']")));
 

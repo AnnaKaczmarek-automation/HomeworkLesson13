@@ -30,9 +30,7 @@ public class TopMenuPage extends BasePage {
 
     public void openOrderHistory() {
         clickOnElement(orderHistoryBtn);
-        log.info("***** User account is opened *****");
+        log.info("***** Order history is opened *****");
     }
-
-
 
 }

@@ -5,9 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,9 +60,8 @@ public class ConfirmationPage extends BasketPage {
 
         for (int i = 0; i < productsList.size(); i++) {
             waitUntilVisibilityOfElement(productName);
-            String name = productsList.get(i).findElement(By.cssSelector(".col-sm-4.col-xs-9.details")).getText().replaceAll(("[a-z]+"), "");
-            String nameFormatted = name.substring(name.length()-26);
-
+            String name = productsList.get(i).findElement(By.cssSelector(".col-sm-4.col-xs-9.details")).getText();
+            String nameFormatted = StringUtils.substringBefore(name, " - ");
             String productPrice = productsList.get(i).findElement(By.cssSelector(".col-xs-4.text-sm-center.text-xs-left")).getText().substring(1);
             double priceDouble = Double.parseDouble(productPrice);
             double productPriceFormatted = Double.parseDouble(df.format(priceDouble));
@@ -72,13 +69,6 @@ public class ConfirmationPage extends BasketPage {
             waitUntilVisibilityOfElement(quantity);
             int quantity = Integer.parseInt(productsList.get(i).findElement(By.xpath("//div[@class='col-sm-6 col-xs-12 qty']/div/div[@class='col-xs-4 text-sm-center']")).getText());
 
-//            Actions actions = new Actions(driver);
-//            actions.moveToElement(totalPrice);
-//            waitUntilVisibilityOfElement(totalPrice);
-//            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".total-value.font-weight-bold td:nth-child(2)")));
-//            String totalPriceBasket = productsList.get(i).findElement(By.cssSelector(".col-xs-4.text-sm-center.text-xs-right.bold")).getText().substring(1);
-//            double totalPriceDouble = Double.parseDouble(totalPriceBasket);
-//            double totalPriceFormatted = Double.parseDouble(df.format(totalPriceDouble));
             String shipping = driver.findElement(By.cssSelector("tbody tr:nth-child(2) td:nth-child(2)")).getText();
             double shippingCost = 0;
             if(StringUtils.isNumeric(shipping)){
@@ -89,8 +79,6 @@ public class ConfirmationPage extends BasketPage {
             }
             double totalPrice = (quantity * productPriceFormatted) + shippingCost;
             productValues.add(new Product(nameFormatted, productPriceFormatted, quantity, totalPrice));
-
-
         }
         return productValues;
     }
@@ -99,9 +87,32 @@ public class ConfirmationPage extends BasketPage {
         driver.navigate().refresh();
         waitUntilVisibilityOfElement(confirmationContent);
         waitUntilVisibilityOfElement(orderNumber);
-        String orderReference = orderNumber.getText().replaceAll(("[a-z]+"), "");
-        log.info("Order reference is " + orderReference);
+        String reference = driver.findElement(By.xpath("//li[contains(text(),'Order reference')]")).getText();
+        String orderReference = StringUtils.removeStart(reference,"Order reference: ");
+        log.info("Order reference: " + orderReference);
         return orderReference;
     }
 
+    public String getDisplayedShippingInfo(){
+        waitUntilVisibilityOfElement(shippingDetails);
+        String shippingInfo = shippingDetails.getText();
+        String formattedInfo = StringUtils.substringBefore(shippingInfo, "");
+        return formattedInfo;
+    }
+
+    public String getDisplayedPaymentInfo(){
+        waitUntilVisibilityOfElement(paymentDetails);
+        String paymentInfo = paymentDetails.getText();
+        String formattedInfo = StringUtils.removeEnd(paymentInfo, "");
+        return formattedInfo;
+    }
+
+    public String getExpectedOrderStatus(){
+        String status = "Awaiting bank wire payment";
+        return status;
+    }
+
+    public void getTotalOrderPrice(){
+
+    }
 }

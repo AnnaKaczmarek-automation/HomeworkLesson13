@@ -1,9 +1,12 @@
 import configuration.TestBase;
+import models.Address;
 import models.Cart;
 import models.Order;
 import models.Product;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pages.*;
@@ -11,6 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+
+@Execution(ExecutionMode.CONCURRENT)
 
 public class MyStoreTest extends TestBase {
     protected Logger log = LoggerFactory.getLogger("MyStoreTest.class");
@@ -26,7 +31,8 @@ public class MyStoreTest extends TestBase {
     protected CheckOutPage checkOutPage;
     protected ConfirmationPage confirmationPage;
     protected OrderHistoryPage orderHistoryPage;
-    protected  TopMenuPage topMenuPage;
+    protected TopMenuPage topMenuPage;
+    protected OrderDetailsPage orderDetailsPage;
 
     @Test
     public void visibilityOfProductNameInSearchBoxTest() throws InterruptedException {
@@ -169,7 +175,6 @@ public class MyStoreTest extends TestBase {
         } catch (Throwable e) {
             log.info("Lists are not equal. " + e.getMessage());
         }
-
         cartPage.verifyShippingCost(cart);
         basketPage.increaseAmountOfProduct(1, 5);
         basketPage.verifyTotalCost(cart);
@@ -184,8 +189,7 @@ public class MyStoreTest extends TestBase {
             basketPage.getQuantityOfDisplayedProducts();
             driver.navigate().refresh();
         }
-
-        assertThat(basketPage.getTotalOrderCost()).isEqualTo(cart.getTotalOrderCost() - 7.00);
+        assertThat(basketPage.getTotalOrderCost()).isEqualTo(cart.getTotalOrderCost(checkOutPage.getShippingValue()));
         assertThat(basketPage.getNoItemNotification()).isEqualTo("There are no more items in your cart");
     }
 
@@ -201,6 +205,7 @@ public class MyStoreTest extends TestBase {
         confirmationPage = new ConfirmationPage(driver);
         orderHistoryPage = new OrderHistoryPage(driver);
         topMenuPage = new TopMenuPage(driver);
+        orderDetailsPage = new OrderDetailsPage(driver);
 
         homePage.choseSignInOption();
         homePage.choseRegisterOption();
@@ -209,10 +214,9 @@ public class MyStoreTest extends TestBase {
         menuPage.waitForMenuRefresh();
         int basketAmount = basketPage.getBasketAmount();
         Cart cart = new Cart();
-        String amount = null;
         while (basketAmount < 5) {
             menuPage.chooseRandomCategoryAndProduct();
-            amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
+            String amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
 
             int maxvalue = basketAmount + Integer.parseInt(amount);
             while (maxvalue > 5) {
@@ -225,25 +229,30 @@ public class MyStoreTest extends TestBase {
             cart.addNewProduct(product);
             productPage.addProductToCart();
 
-            System.out.println("Cart list size is: " + cart.getProductsList().size());
-
             shopCartPopupPage.switchToLastOpenedWindow();
             shopCartPopupPage.verifyShopCartData(product);
             if (shopCartPopupPage.getNumberFromItemsAmountInfo() == 5) {
                 shopCartPopupPage.proceedToCheckoutBtn();
             } else {
                 shopCartPopupPage.continueShopping();
-                int refreshedBasketAmount = productPage.getBasketAmount();
+                int refreshedBasketAmount = basketPage.getBasketAmount();
                 Assert.assertNotEquals(basketAmount, refreshedBasketAmount);
                 log.info("***** Amount of products in basket correctly differentiate from the initial one *****");
             }
-            basketAmount = productPage.getBasketAmount();
+            basketAmount = basketPage.getBasketAmount();
         }
 
+
         basketPage.proceedToCheckOut();
+        double shippingCost = checkOutPage.getShippingValue();
+        double totalCost = checkOutPage.getTotalCost();
         checkOutPage.fillAddressForm();
         checkOutPage.chooseShippingMethod();
         String chosenShipping = checkOutPage.getChosenShippingInfo();
+
+        if (System.getProperty("shippingMethod").equals("shop")) {
+            totalCost = totalCost - 7.00;
+        }
         checkOutPage.choosePaymentOption();
         String chosenPayment = checkOutPage.getChosenPaymentOption();
         checkOutPage.openTermsOfUseInfo();
@@ -264,9 +273,9 @@ public class MyStoreTest extends TestBase {
             log.info("Lists are not equal. " + e.getMessage());
         }
 
-        assertThat(chosenShipping).isEqualTo(checkOutPage.getChosenShippingInfo());
+        assertThat(chosenShipping).isEqualTo(confirmationPage.getDisplayedShippingInfo());
         log.info("Shipping method match chosen option in previous steps");
-        assertThat(chosenPayment).isEqualTo(checkOutPage.getChosenPaymentOption());
+        assertThat(confirmationPage.getDisplayedPaymentInfo()).contains(chosenPayment);
         log.info("Payment method match chosen option in previous steps");
 
 
@@ -274,16 +283,38 @@ public class MyStoreTest extends TestBase {
         topMenuPage.openUserAccount();
         topMenuPage.openOrderHistory();
 
-        if(orderHistoryPage.findOrder().equals(refOrderNumber)){
-            log.info("***** Correct order reference number was displayed *****");
-        }
+        assertThat(refOrderNumber).isEqualTo(orderHistoryPage.findOrder());
+        log.info("***** Correct order number is displayed *****");
 
-//        basePage.
-//        Order actualDetails = orderHistoryPage.getDisplayedOrderDetails();
-//        Order expectedDetails = new Order()
+        String currentDay = basePage.getCurrentDate();
+        Order actualDetails = orderHistoryPage.getDisplayedOrderDetails();
+        Order expectedDetails = new Order(currentDay, totalCost, chosenPayment, confirmationPage.getExpectedOrderStatus());
 
+        assertThat(actualDetails.getDate()).isEqualTo(expectedDetails.getDate());
+        log.info("***** Displayed date is correct ****");
+        assertThat(actualDetails.getPayment()).contains(expectedDetails.getPayment());
+        log.info("***** Displayed payment option is correct ****");
+        assertThat(actualDetails.getStatus()).isEqualTo(expectedDetails.getStatus());
+        log.info("***** Displayed status option is correct ****");
+        assertThat(actualDetails.getPrice()).isEqualTo(expectedDetails.getPrice());
+        log.info("***** Displayed price is correct ****");
 
         orderHistoryPage.chooseDetailsOption();
+
+        Cart detailsCart = new Cart(orderDetailsPage.getProductsInfoFromDetailsPage());
+        try {
+            assertThat(detailsCart).usingRecursiveComparison().isEqualTo(cart);
+            log.info("Lists consist of equal values");
+        } catch (Throwable e) {
+            log.info("Lists are not equal. " + e.getMessage());
+        }
+        log.info("***** Displayed data od details page are correct *****");
+
+        String deliveryAddress = orderDetailsPage.getDeliveryAddressDetails();
+        String invoiceAddress = orderDetailsPage.getInvoiceAddressDetails();
+        assertThat(invoiceAddress).isEqualTo(deliveryAddress);
+        log.info("Displayed details of delivery and invoice address are correct and equals.");
+
 
     }
 }

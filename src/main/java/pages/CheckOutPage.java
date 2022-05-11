@@ -1,6 +1,8 @@
 package pages;
+
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,6 +69,9 @@ public class CheckOutPage extends BasePage {
     @FindBy(css = "#checkout-delivery-step")
     private WebElement shippingForm;
 
+    @FindBy(css = "#cart-subtotal-shipping span:nth-child(2)")
+    private WebElement shippingValue;
+
     @FindBy(xpath = "//button[@class='continue btn btn-primary float-xs-right'][@name='confirmDeliveryOption']")
     private WebElement shippingContinueBtn;
 
@@ -84,9 +91,6 @@ public class CheckOutPage extends BasePage {
     @FindBy(css = "#payment-option-1-container")
     private WebElement paymentCheckBtn;
 
-//    @FindBy(css = "#payment-option-2-container")
-//    private WebElement paymentBankBtn;
-
     @FindBy(css = "#payment-option-2-additional-information section ")
     private WebElement bankInfoSection;
 
@@ -96,14 +100,12 @@ public class CheckOutPage extends BasePage {
     @FindBy(css = "#payment-option-1")
     private WebElement checkRadioBtn;
 
-    @FindBy(css= "#payment-option-2")
+    @FindBy(css = "#payment-option-2")
     private WebElement bankRadioBtn;
 
     @FindBy(css = "#cta-terms-and-conditions-0")
     private WebElement termsInfo;
 
-//    @FindBy(css = ".condition-label")
-//    private WebElement termsBtn;
     @FindBy(css = "#conditions-to-approve ul li")
     private WebElement termsBtn;
 
@@ -124,6 +126,9 @@ public class CheckOutPage extends BasePage {
 
     @FindBy(css = ".payment-option.clearfix")
     private List<WebElement> paymentOptionList;
+
+    @FindBy(css = ".cart-summary-line.cart-total span:nth-child(2)")
+    private WebElement totalPrice;
 
     public void fillAddressForm() {
         waitUntilVisibilityOfElement(addressForm);
@@ -209,37 +214,55 @@ public class CheckOutPage extends BasePage {
         String chosenOption = System.getProperty("shippingMethod");
         System.out.println(chosenOption);
 
-        if (chosenOption.equals("shop")){
+        if (chosenOption.equals("shop")) {
             waitUntilVisibilityOfElement(shippingShopOption);
             shippingShopOption.click();
-
         }
-        if(chosenOption.equals("delivery")){
+        if (chosenOption.equals("delivery")) {
             waitUntilVisibilityOfElement(shippingDeliveryOption);
             shippingDeliveryOption.click();
         }
-
         clickOnElement(shippingContinueBtn);
     }
 
-    public String getChosenShippingInfo(){
-        String chosenOption = null;
-        if(shopRadioBtn.isSelected()){
-            chosenOption = shippingShopOption.findElement(By.cssSelector(".h6.carrier-name")).getText();
+    public double getShippingValue() {
+        DecimalFormat dFormat = new DecimalFormat("#,###.##");
+        String displayedValue = shippingValue.getText().substring(1);
+        double shippingValue = 0;
+        if (StringUtils.isNumeric(displayedValue)) {
+            double shipping = Double.parseDouble(displayedValue);
+            shippingValue = Double.parseDouble(dFormat.format(shipping));
+        } else {
+            shippingValue = 0;
         }
-        if(deliveryRadioBtn.isSelected()){
-            chosenOption = shippingDeliveryOption.findElement(By.cssSelector(".h6.carrier-name")).getText();
+        return shippingValue;
+    }
+
+    public double getTotalCost(){
+        double totalCost = Double.parseDouble(totalPrice.getText().substring(1));
+        return totalCost;
+    }
+
+    public String getChosenShippingInfo() {
+        String expectedOption = System.getProperty("shippingMethod");
+        String chosenOption = null;
+        if (expectedOption.equals("shop")) {
+            chosenOption = driver.findElement(By.cssSelector(".h6.carrier-name")).getText();
+        }
+        if (expectedOption.equals("delivery")) {
+            chosenOption = driver.findElement(By.cssSelector(".h6.carrier-name")).getText();
         }
         return chosenOption;
     }
+
     public void choosePaymentOption() {
         String paymentOption = System.getProperty("payment");
-        if(paymentOption.equals("check")){
+        if (paymentOption.equals("check")) {
             paymentCheckBtn.click();
             log.info("Payment option was chosen");
             waitUntilVisibilityOfElement(bankInfoSection);
         }
-        if(paymentOption.equals("bank")){
+        if (paymentOption.equals("bank")) {
             paymentBankBtn.click();
             log.info("Payment option was chosen");
             waitUntilVisibilityOfElement(bankInfoSection);
@@ -247,50 +270,46 @@ public class CheckOutPage extends BasePage {
     }
 
     public String getChosenPaymentOption() {
+        String paymentOption = System.getProperty("payment");
         String chosenOption = null;
-        if(checkRadioBtn.isSelected()){
-            chosenOption = paymentCheckBtn.findElement(By.xpath("//span[text()='Pay by Check']")).getText();
+        if (paymentOption.equals("check")) {
+            chosenOption = "Check";
             log.info(chosenOption + " was chosen payment option");
         }
-        if(bankRadioBtn.isSelected()){
-            chosenOption = paymentBankBtn.findElement(By.xpath("//span[text()='Pay by bank wire']")).getText();
+        if (paymentOption.equals("bank")) {
+            chosenOption = "Bank";
             log.info(chosenOption + " was chosen payment option");
         }
-
         return chosenOption;
     }
-    public void openTermsOfUseInfo(){
+
+    public void openTermsOfUseInfo() {
         clickOnElement(termsInfo);
     }
 
-    public void verifyTermsOfUsePopupInfo(){
+    public void verifyTermsOfUsePopupInfo() {
         waitUntilVisibilityOfElement(termsOfUseContent);
         String content = termsOfUseContent.getText();
-        if(content.isEmpty()){
+        if (content.isEmpty()) {
             log.info("Terms of use popup window is empty");
         }
-        if(content.matches("[a-zA-Z]+")){
+        if (content.matches("[a-zA-Z]+")) {
             log.info("Terms of use popup correctly contains text");
         }
     }
-    public void confirmTermsOfService(){
+
+    public void confirmTermsOfService() {
         clickOnElement(termsBtn);
         log.info("Terms of use were checked");
     }
 
-    public void choosePlaceOrderButton(){
-//        if(placeOrderBtn.isEnabled()){
-//            highlightElements(placeOrderBtn);
-//            clickOnElement(placeOrderBtn);
-//            log.info("Place order button was chosen");
-//            wait.until(ExpectedConditions.urlContains("order-confirmation"));
-//        }
+    public void choosePlaceOrderButton() {
         waitUntilElementIsClickable(placeOrderBtn);
         clickOnElement(placeOrderBtn);
         log.info("Place order button was chosen");
     }
 
-    public  void closeTermsOfUsePopup(){
+    public void closeTermsOfUsePopup() {
         clickOnElement(crossBtn);
         log.info("Terms of use popup was closed");
     }
