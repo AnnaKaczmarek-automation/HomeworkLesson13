@@ -28,6 +28,4 @@ public class FooterPage extends BasePage {
         verifyVisibilityOfElement("On sale", chosenCategoryName);
         log.info("***** Correct page is loaded *****");
     }
-
-
 }

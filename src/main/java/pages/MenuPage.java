@@ -1,5 +1,6 @@
 package pages;
 
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -7,7 +8,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,8 @@ public class MenuPage extends BasePage {
         super(driver);
     }
 
+    Logger log = LoggerFactory.getLogger("MenuPage.class");
     private static final DecimalFormat df = new DecimalFormat("0.00");
-//    MenuCategory menuCategory = new MenuCategory(driver);
 
     @FindBy(css = ".material-icons.search")
     private WebElement lensButton;
@@ -70,19 +70,15 @@ public class MenuPage extends BasePage {
     @FindBy(xpath = "//div[@class='product-description']/h2/a")
     private WebElement productName;
 
-
-    Logger log = LoggerFactory.getLogger("MenuPage.class");
-
-    public  void chooseRandomCategoryAndProduct() throws InterruptedException {
+    public void chooseRandomCategoryAndProduct() throws InterruptedException {
         getRandomCategory();
         log.info("***** Random category is chosen *****");
         WebElement randomProduct = getRandomElement(displayedProducts);
         randomProduct.click();
-//        clickOnElement(randomProduct);
-
         log.info("***** Random product is chosen *****");
         Thread.sleep(3000);
     }
+
     public void getRandomCategory() {
         clickOnElement(getRandomElement(categoriesList));
     }
@@ -114,7 +110,6 @@ public class MenuPage extends BasePage {
     public void verifyMainMenuOptions() {
         List<WebElement> menuOptions = getMenuOptions();
         waitUntilVisibilityOfAllElements(menuOptions);
-//        wait.until(ExpectedConditions.visibilityOfAllElements(categoriesList));
         for (int i = 0; i < menuOptions.size(); i++) {
             WebElement option = menuOptions.get(i);
             waitUntilElementIsClickable(option);
@@ -204,110 +199,115 @@ public class MenuPage extends BasePage {
         }
     }
 
-    public void moveLeftSlider(int number) throws InterruptedException {
+    public void moveLeftSlider(double number) throws InterruptedException {
         waitUntilVisibilityOfElement(priceRange);
         String priceRangeText = priceRange.getText();
         String lowerPriceString = priceRangeText.substring(1, priceRangeText.length() - 12);
-        int lowerPriceInt = Integer.parseInt(lowerPriceString);
+        double lowerPriceInt = Double.parseDouble(lowerPriceString);
 
         if (number > 8 && number < 30) {
             while (lowerPriceInt < number) {
                 highlightElements(driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[1]")));
                 driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[1]")).sendKeys(Keys.ARROW_RIGHT);
-                lowerPriceInt = Integer.parseInt(priceRange.getText().substring(1, priceRange.getText().length() - 12));
+                lowerPriceInt = Double.parseDouble(priceRange.getText().substring(1, priceRange.getText().length() - 12));
             }
             while (lowerPriceInt > number) {
                 highlightElements(driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[1]")));
                 driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[1]")).sendKeys(Keys.ARROW_LEFT);
-                lowerPriceInt = Integer.parseInt(priceRange.getText().substring(1, priceRange.getText().length() - 12));
+                lowerPriceInt = Double.parseDouble(priceRange.getText().substring(1, priceRange.getText().length() - 12));
             }
             String priceAfterChange = priceRange.getText();
             String lowerPrice = priceAfterChange.substring(1, priceAfterChange.length() - 12);
-            int lowerPriceInteger = Integer.parseInt(lowerPrice);
-            Assert.assertEquals(number, lowerPriceInteger);
+            double lowerPriceInteger = Double.parseDouble(lowerPrice);
+            assertThat(lowerPriceInteger).isEqualTo(number);
             log.info("Given value equals: " + lowerPriceInteger);
+        }
+
+        if (number < 8) {
+            log.info("Given number is too low");
         }
         log.info("***** Slider was moved left, if it was necessary. *****");
     }
 
-    public void moveRightSlider(int number) {
-        waitUntilVisibilityOfElement(priceRange);
+    public void moveRightSlider(double number) {
+        DecimalFormat dFormat = new DecimalFormat("#,###.##");
+        WebElement priceRange = driver.findElement(By.xpath("//li/p[1]"));
         if (number < 10) {
             String priceRangeText = priceRange.getText();
-            String higherPriceString = priceRangeText.substring(9, priceRangeText.length() - 3);
-            int higherPriceInt = Integer.parseInt(higherPriceString);
+            String higherPriceString = StringUtils.substringAfter(priceRangeText, "- $");
+            double higherPriceInt = Double.parseDouble(higherPriceString);
             while (higherPriceInt < number) {
                 highlightElements(driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[2]")));
                 driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[2]")).sendKeys(Keys.ARROW_RIGHT);
-                higherPriceInt = Integer.parseInt(priceRange.getText().substring(9, priceRange.getText().length() - 3));
+                higherPriceInt = Double.parseDouble(StringUtils.substringAfter(priceRange.getText(), "- $"));
             }
             while (higherPriceInt > number) {
                 highlightElements(driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[2]")));
                 driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[2]")).sendKeys(Keys.ARROW_LEFT);
-                higherPriceInt = Integer.parseInt(priceRange.getText().substring(9, priceRange.getText().length() - 3));
+                higherPriceInt = Double.parseDouble(StringUtils.substringAfter(driver.findElement(By.xpath("//li/p[1]")).getText(), "- $"));
             }
             String priceAfterChange = priceRange.getText();
-            String higherPrice = priceAfterChange.substring(9, priceAfterChange.length() - 3);
-            int higherPriceInteger = Integer.parseInt(higherPrice);
+            double higherPriceInteger = Double.parseDouble(StringUtils.substringAfter(priceAfterChange, "- $"));
             Assert.assertEquals(number, higherPriceInteger);
             log.info("Given value equals: " + higherPriceInteger);
         }
 
-
         if (number >= 10 && number < 30) {
             String priceRangeText = priceRange.getText();
-            String higherPriceString = priceRangeText.substring(9, priceRangeText.length() - 3);
-            int higherPriceInt = Integer.parseInt(higherPriceString);
+            String higherPriceString = StringUtils.substringAfter(priceRangeText, "- $");
+            double higherPriceInt = Double.parseDouble(higherPriceString);
             while (higherPriceInt < number) {
                 highlightElements(driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[2]")));
                 rightSlider.sendKeys(Keys.ARROW_RIGHT);
-                higherPriceInt = Integer.parseInt(priceRange.getText().substring(9, priceRange.getText().length() - 3));
+                higherPriceInt = Double.parseDouble(StringUtils.substringAfter(priceRange.getText(), "- $"));
             }
             while (higherPriceInt > number) {
                 highlightElements(driver.findElement(By.xpath("//div[contains(@class,'ui-slider')]/a[2]")));
                 rightSlider.sendKeys(Keys.ARROW_LEFT);
-                higherPriceInt = Integer.parseInt(priceRange.getText().substring(9, priceRange.getText().length() - 3));
+                higherPriceInt = Double.parseDouble(StringUtils.substringAfter(driver.findElement(By.xpath("//li/p[1]")).getText(), "- $"));
             }
-
-            String priceAfterChange2 = priceRange.getText();
-            String higherPrice2 = priceAfterChange2.substring(9, priceAfterChange2.length() - 3);
-            int higherPriceInteger2 = Integer.parseInt(higherPrice2);
-            Assert.assertEquals(number, higherPriceInteger2);
+            String priceAfterChange2 = driver.findElement(By.xpath("//li/p[1]")).getText();
+            String higherPrice2 = StringUtils.substringAfter(priceAfterChange2, "- $");
+            double higherPriceInteger2 = Double.parseDouble(higherPrice2);
+            assertThat(higherPriceInteger2).isEqualTo(number);
             log.info("Given value equals: " + higherPriceInteger2);
+        }
+
+        if (number > 36) {
+            log.info("Given number is too high");
         }
         log.info("***** Slider was moved right, if it was necessary. Price range was selected. *****");
     }
 
-    public void checkProductInPriceRange(int lowerNumber, int higherNumber) {
-        List<WebElement> displayedProducts = driver.findElements(By.xpath("//article[@class='product-miniature js-product-miniature']"));
-        for (WebElement product : displayedProducts) {
-//            WebElement productPrice = driver.findElement(By.xpath("//span[@class='price']"));
-//            String productName = driver.findElement(By.cssSelector(".h3.product-title a")).getText();
-            double productPriceText = Double.parseDouble(driver.findElement(By.xpath("//span[@class='price']")).getText().replaceAll("[^0-9.]", ""));
+    public void checkProductInPriceRange(double lowerNumber, double higherNumber) {
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(displayedProducts)));
 
-            System.out.println(productPriceText);
-
+        for(int i=0 ; i < displayedProducts.size() ; i++){
+            String productName = displayedProducts.get(i).findElement(By.xpath(".//div[@class='product-description']/h2[@class='h3 product-title']/a")).getText();
+            double productPriceText = Double.parseDouble(displayedProducts.get(i).findElement(By.xpath("//span[@class='price']")).getText().replaceAll("[^0-9.]", ""));
             if (productPriceText <= higherNumber && productPriceText >= lowerNumber) {
-                log.info("Product: " + driver.findElement(By.xpath(".//div[@class='product-description']/h2[@class='h3 product-title']/a")).getText() + " price belong to given price range.");
+                log.info("Product: " + productName + " price belong to given price range.");
             } else {
-                log.info("Product " + product.getText() + " price DOES NOT belong to given price range.");
+                log.info("Product " + displayedProducts.get(i).getText() + " price DOES NOT belong to given price range.");
             }
         }
         log.info("***** Products have been verified in terms of price. ***** ");
     }
 
     public void clearFilters() {
-        waitUntilElementIsClickable(clearFiltersBtn);
-        driver.findElement(By.xpath("//button[@class='btn btn-tertiary js-search-filters-clear-all']/i")).click();
-
-        log.info("***** Filters ale cleared. *****");
+        try {
+            driver.findElement(By.xpath("//button[@class='btn btn-tertiary js-search-filters-clear-all']/i")).click();
+            log.info("***** Filters ale cleared. *****");
+        } catch (NoSuchElementException e) {
+            driver.quit();
+            log.info("***** Filters were not changed. 'clear all' button is not visible" + e.getMessage() + " *****");
+        }
     }
 
     public void checkDiscountVisibility() {
         wait.until(c -> displayedProducts.size() == 2);
         if (displayedProducts.size() > 0) {
             for (WebElement product : displayedProducts) {
-
                 waitUntilVisibilityOfElement(product);
                 WebElement discount = product.findElement(By.xpath(".//ul[@class='product-flags']/li"));
                 String discountAmount = discount.getText();
@@ -340,13 +340,11 @@ public class MenuPage extends BasePage {
     }
 
     public void selectRandomProduct() {
-//        waitUntilVisibilityOfAllElements(displayedProducts);
         WebElement randomProduct = getRandomElement(displayedProducts);
         waitUntilVisibilityOfElement(randomProduct);
         randomProduct.click();
         log.info("***** Product is selected *****");
     }
-
 }
 
 

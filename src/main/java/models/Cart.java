@@ -1,5 +1,4 @@
 package models;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,6 @@ public class Cart {
                 product.addQuantity(productToAdd.getQuantity());
             }
             if (product.getName().equals(productToAdd.getName())) {
-//                product.updateTotalPrice(productToAdd.getPrice());
                 product.updateTotalPrice(productToAdd.getTotalPrice());
             }
         }

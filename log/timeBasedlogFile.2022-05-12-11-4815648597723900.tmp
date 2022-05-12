@@ -1,0 +1,72 @@
+[main] I CreateAccountPage.class - ( Gender radiobutton was chosen
+[main] I CreateAccountPage.class - ( Name is typed in
+[main] I CreateAccountPage.class - ( LastName is typed in
+[main] I CreateAccountPage.class - ( Mail is typed in
+[main] I CreateAccountPage.class - ( Password is typed in
+[main] I CreateAccountPage.class - ( Birth date is typed in
+[main] I CreateAccountPage.class - ( Policy is accepted
+[main] I CreateAccountPage.class - ( Save button was chosen
+[main] I BasePage.class - ( Actual amount of products in basket is: 15
+[main] I BasePage.class - ( Actual amount of products in basket is: 15
+[main] I MyStoreTest.class - ( Lists are not equal. 
+Expecting actual:
+  models.Cart@44c073bd
+to be equal to:
+  models.Cart@5ddc077b
+when recursively comparing field by field, but found the following difference:
+
+field/property 'productsList' differ:
+- actual value  : []
+- expected value: [models.Product@6ed99447, models.Product@7a977d23, models.Product@51173c3a]
+actual and expected values are collections of different size, actual size=0 when expected size=3
+
+The recursive comparison was performed with this configuration:
+- no overridden equals methods were used in the comparison (except for java types)
+- these types were compared with the following comparators:
+  - java.lang.Double -> DoubleComparator[precision=1.0E-15]
+  - java.lang.Float -> FloatComparator[precision=1.0E-6]
+  - java.nio.file.Path -> lexicographic comparator (Path natural order)
+- actual and expected objects and their fields were compared field by field recursively even if they were not of the same type, this allows for example to compare a Person to a PersonDto (call strictTypeChecking(true) to change that behavior).
+
+[main] I MenuPage.class - ( Expected category name in: CLOTHES
+[main] I MenuPage.class - ( category was chosen
+[main] I MenuPage.class - ( Correct category was displayed
+[main] I MenuPage.class - ( FilterMenu was displayed
+[main] I MenuPage.class - ( Amount of displayed products is: 2
+[main] I MenuPage.class - ( Label information is: 'There are 2 products.'
+[main] I MenuPage.class - ( Amount of available options is correct
+[main] I MenuPage.class - ( Expected category name in: ACCESSORIES
+[main] I MenuPage.class - ( category was chosen
+[main] I MenuPage.class - ( Correct category was displayed
+[main] I MenuPage.class - ( FilterMenu was displayed
+[main] I MenuPage.class - ( Amount of displayed products is: 10
+[main] I MenuPage.class - ( Label information is: 'There are 10 products.'
+[main] I MenuPage.class - ( Amount of available options is correct
+[main] I MenuPage.class - ( Expected category name in: ART
+[main] I MenuPage.class - ( category was chosen
+[main] I MenuPage.class - ( Correct category was displayed
+[main] I MenuPage.class - ( FilterMenu was displayed
+[main] I MenuPage.class - ( Amount of displayed products is: 6
+[main] I MenuPage.class - ( Label information is: 'There are 6 products.'
+[main] I MenuPage.class - ( Amount of available options is correct
+[main] I MenuPage.class - ( Expected subcategory name is: Men
+[main] I MenuPage.class - ( SubOption was chosen
+[main] I MenuPage.class - ( Correct subOption was displayed
+[main] I MenuPage.class - ( FilterMenu was displayed
+[main] I MenuPage.class - ( Amount of displayed products given in text information is correct
+[main] I MenuPage.class - ( Expected subcategory name is: Women
+[main] I MenuPage.class - ( SubOption was chosen
+[main] I MenuPage.class - ( Correct subOption was displayed
+[main] I MenuPage.class - ( FilterMenu was displayed
+[main] I MenuPage.class - ( Amount of displayed products given in text information is correct
+[main] I MenuPage.class - ( Expected subcategory name is: Stationery
+[main] I MenuPage.class - ( SubOption was chosen
+[main] I MenuPage.class - ( Correct subOption was displayed
+[main] I MenuPage.class - ( FilterMenu was displayed
+[main] I MenuPage.class - ( Amount of displayed products given in text information is correct
+[main] I MenuPage.class - ( Expected subcategory name is: Home Accessories
+[main] I MenuPage.class - ( SubOption was chosen
+[main] I MenuPage.class - ( Correct subOption was displayed
+[main] I MenuPage.class - ( FilterMenu was displayed
+[main] I MenuPage.class - ( Amount of displayed products given in text information is correct
+[main] I MenuPage.class - ( [[ChromeDriver: chrome on WINDOWS (f0c99dfd0c7992cd194955370f5fa581)] -> xpath: //ul[@id='top-menu']/li/a]Category does not have subcategories

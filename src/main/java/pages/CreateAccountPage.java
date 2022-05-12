@@ -1,23 +1,19 @@
 package pages;
-
 import com.github.rkumsher.date.RandomDateUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.security.SecureRandom;
 import java.time.LocalDate;
 
-import static java.time.temporal.ChronoUnit.YEARS;
-
 public class CreateAccountPage extends BasePage {
-    private com.github.rkumsher.date.RandomDateUtils RandomDateUtils;
-
     public CreateAccountPage(WebDriver driver) {
         super(driver);
     }
+
+    private com.github.rkumsher.date.RandomDateUtils RandomDateUtils;
 
     Logger log = LoggerFactory.getLogger("CreateAccountPage.class");
     @FindBy(css = ".custom-radio input[value='1']")
@@ -83,10 +79,7 @@ public class CreateAccountPage extends BasePage {
     }
 
     private String generateRandomDate() {
-        LocalDate birthDate = RandomDateUtils.randomPastLocalDate();
-//        LocalDate today = LocalDate.now();
-//        LocalDate under18YearsOld = RandomDateUtils.randomLocalDate(today.minus(18, YEARS), today);
-//        LocalDate over18YearsOld = RandomDateUtils.randomLocalDateBefore(today.minus(18, YEARS));
+        LocalDate birthDate = com.github.rkumsher.date.RandomDateUtils.randomPastLocalDate();
         return String.valueOf(birthDate);
     }
 
@@ -100,8 +93,6 @@ public class CreateAccountPage extends BasePage {
             int randomIndex = random.nextInt(chars.length());
             sb.append(chars.charAt(randomIndex));
         }
-
         return sb.toString();
-
     }
 }

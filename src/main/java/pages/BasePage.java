@@ -3,7 +3,6 @@ package pages;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,32 +17,25 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webListener.WebListener;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 
 public class BasePage {
-
-    protected Actions actions;
-    protected WebDriver driver;
-    protected WebDriverWait wait;
-    private EventFiringMouse eventFiringMouse;
-    private ProductPage productPage;
-    //    private MenuCategory menuCategory;
-    private MenuPage menuPage;
-    private ShopCartPopupPage shopCartPopupPage;
-    private Logger log = LoggerFactory.getLogger("BasePage.class");
-
     public BasePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
         wait = new WebDriverWait(driver, 40);
         actions = new Actions(driver);
     }
+
+    protected Actions actions;
+    protected WebDriver driver;
+    protected WebDriverWait wait;
+    private EventFiringMouse eventFiringMouse;
+
+    private Logger log = LoggerFactory.getLogger("BasePage.class");
+
 
     @FindBy(xpath = "//span[@class='cart-products-count']")
     private WebElement basketAmount;
@@ -87,6 +79,20 @@ public class BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    public boolean verifyIfElementIsVisible(WebElement element) {
+        if (element.isDisplayed()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isDisplayed(WebElement element) {
+        try {
+            return element.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
     public String createRandomMailAddress() {
         FakeValuesService fakeValuesService = new FakeValuesService(
                 new Locale("en-GB"), new RandomService());

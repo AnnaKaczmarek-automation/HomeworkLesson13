@@ -10,7 +10,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,19 +17,16 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Set;
 
 public class ShopCartPopupPage extends BasePage {
-
-    private DecimalFormat dFormat;
-
     public ShopCartPopupPage(WebDriver driver) {
         super(driver);
     }
 
+    private DecimalFormat dFormat;
+
     Logger log = LoggerFactory.getLogger("ShopCartPopupPage.class");
 
-    //name, price, quantity, there are X items in your cart, Total products value
     @FindBy(xpath = "//div[@class='col-md-6']/h6")
     private WebElement displayedName;
 

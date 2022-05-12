@@ -14,6 +14,7 @@ public class CartPage extends BasePage{
     public CartPage(WebDriver driver) {
         super(driver);
     }
+    DecimalFormat dFormat;
 
     private Logger log = LoggerFactory.getLogger("CartPage.class");
 
@@ -25,10 +26,6 @@ public class CartPage extends BasePage{
 
     @FindBy(css = ".cart-summary-line.cart-total span.value:nth-child(2)")
     private WebElement totalCost;
-
-    DecimalFormat dFormat;
-
-
 
     public Double getTotalPrice(){
          dFormat = new DecimalFormat("#,###.##");

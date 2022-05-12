@@ -3,14 +3,12 @@ package pages;
 import models.Product;
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.swing.*;
-import java.awt.*;
-import java.rmi.server.ExportException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,6 @@ public class ProductPage extends BasePage {
     private ShopCartPopupPage shopCartPopupPage = new ShopCartPopupPage(driver);
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private List<Product> selectedProductsList = new ArrayList<>();
-//    Dimension currentDimension = driver.manage().window().getSize();
 
     @FindBy(xpath = "//div[@class='col-md-6']/h1")
     private WebElement displayedProduct;
@@ -74,11 +71,7 @@ public class ProductPage extends BasePage {
     }
 
     public void setProductAmount(String amount) {
-//        waitUntilVisibilityOfElement(amountInput);
-//        amountInput.clear();
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".product-add-to-cart")));
         driver.findElement(By.cssSelector("#quantity_wanted")).clear();
-//        amountInput.sendKeys(amount);
         driver.findElement(By.cssSelector("#quantity_wanted")).sendKeys(amount);
         log.info("***** Amount of products was types in *****");
     }
@@ -88,13 +81,13 @@ public class ProductPage extends BasePage {
             clickOnElement(addToCartBtn);
             Thread.sleep(5000);
             log.info("***** Product was added to cart *****");
-
         } catch (TimeoutException e) {
-            JFrame frame = new JFrame();
-            java.awt.Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frame.setSize(dim.width / 2, dim.height / 2);
-            waitUntilVisibilityOfElement(addToCartBtn);
-            clickOnElement(addToCartBtn);
+            while(!verifyIfElementIsVisible(addToCartBtn)){
+                Actions actions = new Actions(driver);
+                actions.sendKeys(Keys.CONTROL).sendKeys(Keys.ARROW_DOWN);
+                verifyIfElementIsVisible(addToCartBtn);
+            }
+            addToCartBtn.click();
             log.info("***** Product was added to cart *****");
         }
     }

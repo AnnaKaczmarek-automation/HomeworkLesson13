@@ -17,9 +17,6 @@ public class HomePage extends BasePage {
 
     Logger log= LoggerFactory.getLogger("HomePage.class");
 
-//    @FindBy(xpath = "//div[@class='product']/article[@class='product-miniature js-product-miniature']/div[@class='thumbnail-container reviews-loaded']/div[@class='product-description']/h3[@class='h3 product-title']/a")
-//    private List<WebElement> ListOfProducts;
-
     @FindBy(css = ".products.row article")
     private List<WebElement> ListOfProducts;
 
@@ -37,16 +34,9 @@ public class HomePage extends BasePage {
 
 
     public WebElement getRandomProduct() {
-//        int sizeOfList = ListOfProducts.size();
-//        System.out.println(sizeOfList);
-//        int randomProductIndex = ThreadLocalRandom.current().nextInt(sizeOfList) % ListOfProducts.size();
-//        WebElement randomProduct = ListOfProducts.get(randomProductIndex);
-//        return randomProduct;
         WebElement randomProduct = getRandomElement(ListOfProducts);
         log.info("***** Random product is chosen *****");
         return randomProduct;
-
-
     }
 
     public String getProductsName(WebElement element){
@@ -67,6 +57,4 @@ public class HomePage extends BasePage {
     public void choseRegisterOption(){
         clickOnElement(registerBtn);
     }
-
-
 }

@@ -1,0 +1,36 @@
+[main] D EnvironmentProperty - ( >>>>>>> Environment name : env_int
+[main] D EnvironmentProperty - ( #### Loading property from uri file:/C:/Selenium_Java_course/HomeworkLesson13/target/classes/env_int
+[main] D EnvironmentProperty - ( ****Loading environment property country = Poland 
+[main] D EnvironmentProperty - ( ****Loading environment property gender = male 
+[main] D EnvironmentProperty - ( ****Loading environment property city = Rome 
+[main] D EnvironmentProperty - ( ****Loading environment property postalCode = 43-573 
+[main] D EnvironmentProperty - ( ****Loading environment property shippingMethod = shop 
+[main] D EnvironmentProperty - ( ****Loading environment property appUrl = http://146.59.32.4/index.php 
+[main] D EnvironmentProperty - ( ****Loading environment property firstName = Ania 
+[main] D EnvironmentProperty - ( ****Loading environment property env_name = int 
+[main] D EnvironmentProperty - ( ****Loading environment property street = Happy 
+[main] D EnvironmentProperty - ( ****Loading environment property addressNumber = 16 
+[main] D EnvironmentProperty - ( ****Loading environment property eTitle = Selenium 
+[main] D EnvironmentProperty - ( ****Loading environment property alias = Anka 
+[main] D EnvironmentProperty - ( ****Loading environment property company = Sii 
+[main] D EnvironmentProperty - ( ****Loading environment property payment = bank 
+[main] D EnvironmentProperty - ( ****Loading environment property state = Hawaii 
+[main] D EnvironmentProperty - ( ****Loading environment property secondName = Kaczmarek 
+[main] D EnvironmentProperty - ( #### Properties loaded from env_int : 16 
+[main] D i.g.b.wdm.cache.ResolutionCache - ( Resolution chrome=101 in cache (valid until 12:00:06 12/05/2022 CEST)
+[main] D i.g.b.wdm.cache.ResolutionCache - ( Resolution chrome101=101.0.4951.41 in cache (valid until 13:52:24 12/05/2022 CEST)
+[main] I i.g.bonigarcia.wdm.WebDriverManager - ( Using chromedriver 101.0.4951.41 (resolved driver for Chrome 101)
+[main] D i.g.bonigarcia.wdm.WebDriverManager - ( Driver chromedriver 101.0.4951.41 found in cache
+[main] I i.g.bonigarcia.wdm.WebDriverManager - ( Exporting webdriver.chrome.driver as C:\Users\kaczmaa5\.cache\selenium\chromedriver\win32\101.0.4951.41\chromedriver.exe
+[main] I MenuPage.class - ( ***** [[ChromeDriver: chrome on WINDOWS (c4cfec0ecae1b34e354c96683d9f261e)] -> xpath: //ul[@id='top-menu']/li/a] category was opened. *****
+[main] I MenuPage.class - ( Given value equals: 9.0
+[main] I MenuPage.class - ( ***** Slider was moved left, if it was necessary. *****
+[main] I MenuPage.class - ( Given number is too high
+[main] I MenuPage.class - ( ***** Slider was moved right, if it was necessary. Price range was selected. *****
+[main] I MenuPage.class - ( Product: THE ADVENTURE POSTER price belong to given price range.
+[main] I MenuPage.class - ( Product: THE BEST IS YET POSTER price belong to given price range.
+[main] I MenuPage.class - ( Product: TODAY POSTER price belong to given price range.
+[main] I MenuPage.class - ( Product: MOUNTAIN FOX VECTOR price belong to given price range.
+[main] I MenuPage.class - ( Product: BROWN BEAR VECTOR price belong to given price range.
+[main] I MenuPage.class - ( Product: HUMMINGBIRD VECTOR price belong to given price range.
+[main] I MenuPage.class - ( ***** Products have been verified in terms of price. ***** 

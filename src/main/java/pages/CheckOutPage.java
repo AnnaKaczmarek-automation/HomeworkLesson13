@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
@@ -22,7 +21,6 @@ public class CheckOutPage extends BasePage {
     }
 
     Logger log = LoggerFactory.getLogger("CheckOutPage.class");
-    BasketPage basketPage = new BasketPage(driver);
 
     @FindBy(css = "#checkout-addresses-step")
     private WebElement addressForm;
@@ -87,7 +85,6 @@ public class CheckOutPage extends BasePage {
     @FindBy(css = "#delivery_option_2")
     private WebElement deliveryRadioBtn;
 
-
     @FindBy(css = "#payment-option-1-container")
     private WebElement paymentCheckBtn;
 
@@ -151,8 +148,6 @@ public class CheckOutPage extends BasePage {
 
         FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-GB"), new RandomService());
         String number = fakeValuesService.numerify("########");
-
-
         setValueIntoInputBox(phoneInput, number);
     }
 
@@ -322,6 +317,4 @@ public class CheckOutPage extends BasePage {
         }
         log.info("<<<<<<<<<< Switch to last opened window");
     }
-
-
 }

@@ -8,7 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,9 +109,5 @@ public class ConfirmationPage extends BasketPage {
     public String getExpectedOrderStatus(){
         String status = "Awaiting bank wire payment";
         return status;
-    }
-
-    public void getTotalOrderPrice(){
-
     }
 }

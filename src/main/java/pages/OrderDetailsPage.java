@@ -6,7 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,6 @@ public class OrderDetailsPage extends BasePage {
     public OrderDetailsPage(WebDriver driver) {
         super(driver);
     }
-
-    //check if all added products are displayed and have all correct details (names, prices quantities)
 
     @FindBy(css = ".box.hidden-sm-down")
     private WebElement productSection;
@@ -33,7 +30,6 @@ public class OrderDetailsPage extends BasePage {
 
     public List<Product> getProductsInfoFromDetailsPage() {
         DecimalFormat dFormat = new DecimalFormat("#,###.##");
-
         waitUntilVisibilityOfElement(productSection);
         List<Product> listOfProducts = new ArrayList<>();
         Product product;
@@ -51,9 +47,7 @@ public class OrderDetailsPage extends BasePage {
         return listOfProducts;
     }
 
-    //check if Delivery address and Invoice address have values that you used in checkout
     public String getDeliveryAddressDetails(){
-
         String addressDetails = deliveryAddress.getText();
         return addressDetails;
     }
@@ -61,6 +55,5 @@ public class OrderDetailsPage extends BasePage {
     public String getInvoiceAddressDetails(){
         String addressDetails = invoiceAddress.getText();
         return addressDetails;
-
     }
 }

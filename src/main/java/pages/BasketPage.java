@@ -1,26 +1,14 @@
 package pages;
 
-import helpers.StringConverter;
 import models.Cart;
 import models.Product;
-//import org.assertj.core.api.Assertions;
-import static org.assertj.core.api.Assertions.*;
-
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +141,7 @@ public class BasketPage extends BasePage {
 
     public void proceedToCheckOut(){
         waitUntilVisibilityOfElement(proceedToCheckOutBtn);
-        proceedToCheckOutBtn.click();
+        driver.findElement(By.cssSelector(".text-sm-center .btn.btn-primary")).click();
         log.info("Button 'Proceed to checkout' was chosen");
     }
 

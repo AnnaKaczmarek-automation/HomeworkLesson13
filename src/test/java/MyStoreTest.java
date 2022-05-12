@@ -13,9 +13,9 @@ import pages.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.awt.*;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Execution(ExecutionMode.CONCURRENT)
 public class MyStoreTest extends TestBase {
     protected Logger log = LoggerFactory.getLogger("MyStoreTest.class");
@@ -73,11 +73,10 @@ public class MyStoreTest extends TestBase {
     public void filtersTest() throws InterruptedException {
         menuPage = new MenuPage(driver);
         menuPage.selectCategory("Art");
-        menuPage.moveLeftSlider(9);
-        menuPage.moveRightSlider(10);
-        menuPage.checkProductInPriceRange(9, 10);
+        menuPage.moveLeftSlider(9.00);
+        menuPage.moveRightSlider(10.00);
+        menuPage.checkProductInPriceRange(9.00, 10.00);
         menuPage.clearFilters();
-        //dodac warunek co zrobic, jeśli poda sie zbyt wysoką liczbę
     }
 
     @DisplayName("Prices drop test")
@@ -225,8 +224,6 @@ public class MyStoreTest extends TestBase {
         String amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
         while (basketAmount < 5) {
             menuPage.chooseRandomCategoryAndProduct();
-//            String amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
-
             int maxvalue = basketAmount + Integer.parseInt(amount);
             while (maxvalue > 5) {
                 amount = String.valueOf(basePage.getRandomNumberInRange(1, 3));
@@ -235,7 +232,9 @@ public class MyStoreTest extends TestBase {
             productPage.setProductAmount(amount);
             System.out.println("typed amount was: " + amount);
             Thread.sleep(3000);
-            Product product = new Product(productPage.getProductName(), productPage.getProductDiscPrice(), Integer.parseInt(amount), productPage.getProductDiscPrice() * Integer.parseInt(amount));
+            DecimalFormat dFormat = new DecimalFormat("#,###.##");
+            double totalPriceFormatted = Double.parseDouble(dFormat.format(productPage.getProductDiscPrice() * Integer.parseInt(amount)));
+            Product product = new Product(productPage.getProductName(), productPage.getProductDiscPrice(), Integer.parseInt(amount), totalPriceFormatted );
             cart.addNewProduct(product);
             productPage.addProductToCart();
 
